@@ -40,7 +40,7 @@ public class Columns {
 
             if(keypr == 1) {
 
-                if (rkey == KeyEvent.VK_1) {
+                if (rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1 ) {
                     consoleClear();
                     printGameArea();
 
@@ -57,13 +57,13 @@ public class Columns {
                     }
                 }
 
-                else if(rkey == KeyEvent.VK_2){
+                else if(rkey == KeyEvent.VK_2 || rkey == KeyEvent.VK_NUMPAD2 ){
                     consoleClear();
                     cn.getTextWindow().setCursorPosition(28, 0);
                     System.out.println("HOW TO PLAY?");
                 }
 
-                else if(rkey == KeyEvent.VK_3){
+                else if(rkey == KeyEvent.VK_3 || rkey == KeyEvent.VK_NUMPAD3 ){
                     consoleClear();
                     exitMessage();
                     Thread.sleep(3000);
