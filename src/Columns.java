@@ -1,16 +1,16 @@
 import enigma.core.Enigma;
 import enigma.event.TextMouseEvent;
 import enigma.event.TextMouseListener;
-import jdk.swing.interop.SwingInterOpUtils;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
-import java.util.Scanner;
+
 
 public class Columns {
 
-    public static enigma.console.Console cn = Enigma.getConsole("Columns", 65, 20, 20, 1);
+
+
+    public static enigma.console.Console cn = Enigma.getConsole("Columns", 75, 20, 15, 1);
 
     private TextMouseListener tmlis;
     private KeyListener klis;
@@ -22,16 +22,60 @@ public class Columns {
     private static int score = 0;
     private static int transfer = 0;
 
-
     private static Random rnd = new Random();
-
     private static SingleLinkedList box = new SingleLinkedList();
-
-    Scanner scan = new Scanner(System.in);
+    private static DoubleLinkedList highScoreList = new DoubleLinkedList();
 
     Columns() throws InterruptedException {
         consoleClear();
+        mouseListener();
 
+        generateBox();
+        printGameArea();
+
+
+        while(true) {
+            consoleClear();
+            printMenu();
+
+            if(keypr == 1) {
+
+                if (rkey == KeyEvent.VK_1) {
+                    consoleClear();
+                    printGameArea();
+
+
+                    while (true) {
+                        if (mousepr == 1) {
+                            cn.getTextWindow().setCursorPosition(mousex, mousey);
+                            box.pop();
+                            printGameArea();
+
+                            mousepr = 0;
+                        }
+                        Thread.sleep(50);
+                    }
+                }
+
+                else if(rkey == KeyEvent.VK_2){
+                    consoleClear();
+                    cn.getTextWindow().setCursorPosition(28, 0);
+                    System.out.println("HOW TO PLAY?");
+                }
+
+                else if(rkey == KeyEvent.VK_3){
+                    consoleClear();
+                    exitMessage();
+                    Thread.sleep(3000);
+                    break;
+                }
+            }
+            keypr = 0;
+            Thread.sleep(50);
+        }
+    }
+
+    private void mouseListener() {
         tmlis = new TextMouseListener() {
             public void mouseClicked(TextMouseEvent arg0) {
             }
@@ -65,49 +109,9 @@ public class Columns {
             }
         };
         cn.getTextWindow().addKeyListener(klis);
-
-        //-----------------------------------------------------
-        while (true) {
-            consoleClear();
-            printMenu();
-
-            if(keypr == 1) {
-
-                if (rkey == KeyEvent.VK_1) {
-                    consoleClear();
-                    printGameArea();
-
-                    while (true) {
-                        if (mousepr == 1) {
-                            cn.getTextWindow().setCursorPosition(mousex, mousey);
-                            box.pop();
-
-                            mousepr = 0;
-                        }
-                        Thread.sleep(50);
-                    }
-                }
-
-                else if(rkey == KeyEvent.VK_2){
-                    consoleClear();
-                    cn.getTextWindow().setCursorPosition(28, 0);
-                    System.out.println("HOW TO PLAY?");
-                }
-
-                else if(rkey == KeyEvent.VK_3){
-                    consoleClear();
-                    exitMessage();
-                    Thread.sleep(3000);
-                    break;
-                }
-            }
-            keypr = 0;
-            Thread.sleep(50);
-        }
-
     }
 
-    //VK
+
     public static void printMenu() {
         cn.getTextWindow().setCursorPosition(15, 3);
         System.out.println("---------------------------------");
@@ -148,14 +152,14 @@ public class Columns {
         cn.getTextWindow().setCursorPosition(0, 0);
     }
 
-    private static void printGameArea() {
+    private static void printGameArea() { // 5 columns
 
-        for (int i = 1; i < 5; i++) {
-            cn.getTextWindow().setCursorPosition(10 * i - 5, 0);
+        for(int i = 1; i < 6; i++) {
+            cn.getTextWindow().setCursorPosition(8 * i - 5, 0); // 10 yerine 8*
             System.out.print("+--+");
-            cn.getTextWindow().setCursorPosition(10 * i - 5, 1);
+            cn.getTextWindow().setCursorPosition(8 * i - 5, 1);
             System.out.print("|C" + i + "|");
-            cn.getTextWindow().setCursorPosition(10 * i - 5, 2);
+            cn.getTextWindow().setCursorPosition(8 * i - 5, 2);
             System.out.print("|--|");
         }
 
@@ -179,4 +183,18 @@ public class Columns {
 
     }
 
+    private int createRandomNumber(int minValue, int maxValue) {
+        Random random = new Random();
+        int number = random.nextInt((maxValue - minValue) +  1) + minValue;
+        return number;
+    }
+
+    private void generateBox() {
+        while(box.size() < 50) {
+            int randomNumber = createRandomNumber(1,10); // Generates random numbers between 1 and 10 [1,10]
+            if(!box.isNumberCountFull(randomNumber)) {
+                box.add(randomNumber);
+            }
+        }
+    }
 }
