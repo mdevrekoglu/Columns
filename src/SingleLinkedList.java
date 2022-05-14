@@ -99,17 +99,20 @@ public class SingleLinkedList {
 		}
 	}
 
-	public void pop() {
+	public Object pop() {
 		if(head == null) {
 			System.out.print('X');
+			return null;
 		}
 		else{
 			System.out.print(head.getData());
+			Object retData = head.getData();
 			head = head.getLink();
-		}
+			return retData;
+		}	
 	}
 
-	public boolean isNumberCountFull(Object data) {
+	public boolean isNumberCountFull(Object data) { // checks if there are 5 of the same number
 		if(head == null) {
 			return false;
 		}
@@ -128,5 +131,29 @@ public class SingleLinkedList {
 				return false;
 
 		}
+	}
+	
+	public Object getElement(int x) { // returns the item in the desired index
+		if(head == null)
+		{
+			System.out.println("List is empty");
+			return null;
+		}
+		else if(x > size() || x < 0 ){
+			System.out.println("Index is out of range");
+			return null;
+		}
+		else {
+			Node temp = head;
+			int count = 1;
+			while(temp != null) {
+				if(x == count)
+					return temp.getData();
+				temp = temp.getLink();
+				count++;
+			}
+			return null;
+		}
+
 	}
 }

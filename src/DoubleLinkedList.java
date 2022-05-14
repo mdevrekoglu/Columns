@@ -8,49 +8,51 @@ public class DoubleLinkedList {
         tail = null;
     }
 
-    public void add(Player dataToAdd) {
-        boolean flag = true;
-        if ((head == null) && (tail == null)) {
-            DoubleLinkedListNode newNode = new DoubleLinkedListNode(dataToAdd);
-            head = newNode;
-            tail = newNode;
-        } else {
-            DoubleLinkedListNode newNode = new DoubleLinkedListNode(dataToAdd);
-            DoubleLinkedListNode temp = head;
-            while (temp.getNext() != null && (Double.compare((Double) dataToAdd.getScore(), (Double) ((Player) temp.getNext().getData()).getScore()) > 0)) {
-                temp = temp.getNext();
-            }/**
-            if (head.getNext() == null) {
-                if (Double.compare((Double) dataToAdd.getScore(), (Double) ((Player) temp.getData()).getScore()) > 0){
-                    head = newNode;
-                    tail = temp;
-                    head.setNext(temp);
-                    temp.setPrev(head);
-                    flag = false;
-                }
-            }
-            */
-            newNode.setPrev(temp);
-            newNode.setNext(temp.getNext());
-            if (temp.getNext() != null) {
-                temp.getNext().setPrev(newNode);
-            } else
-                tail = newNode;
-            temp.setNext(newNode);
-        }
-    }
 
-    public void removeFirstElement() {
+    public void add (Player dataToAdd) { // adds the inserted elements in order from largest to smallest
+		
+		if((head == null) && (tail == null)) {
+			DoubleLinkedListNode newNode = new DoubleLinkedListNode(dataToAdd);
+			head = newNode;
+			tail = newNode;
+		}
+		else if((Double)dataToAdd.getScore() > (Double)((Player)head.getData()).getScore()) {
+			DoubleLinkedListNode newNode = new DoubleLinkedListNode(dataToAdd);
+			newNode.setNext(head);
+			head.setPrev(newNode);
+			head = newNode;
+		}
+		else {
+			DoubleLinkedListNode newNode = new DoubleLinkedListNode(dataToAdd);
+			DoubleLinkedListNode temp = head;
+			while(temp.getNext()!= null && ((Double)dataToAdd.getScore() < (Double)((Player)temp.getNext().getData()).getScore())) {
+				temp = temp.getNext();
+			}
+			newNode.setPrev(temp);
+			newNode.setNext(temp.getNext());
+			if(temp.getNext() != null) {
+				temp.getNext().setPrev(newNode);
+			}
+			else 
+				tail = newNode;
+			temp.setNext(newNode);
+		}
+	}
+
+    public void removeLastElement() {
         if (head == null) {
             System.out.println("linked list is empty");
         } else if (size() == 1) {
             head = null;
         } else {
+        	
             DoubleLinkedListNode temp = head;
-            temp.getNext().setPrev(null);
-            if (head.getNext() != null)
-                head = head.getNext();
-
+            while(temp.getNext() != null) {
+            	temp = temp.getNext();
+            }
+            temp.getPrev().setNext(null);
+            temp.setPrev(null);
+            temp = null;
         }
     }
 
@@ -71,31 +73,41 @@ public class DoubleLinkedList {
     }
 
     public void display() {
-        if (head == null) {
-            System.out.println("List is empty!");
-        } else {
-            DoubleLinkedListNode temp = tail;
-            while (temp != null) {
-                System.out.println(((Player) temp.getData()).getName() + " " + ((Player) temp.getData()).getScore());
-                temp = temp.getPrev();
-            }
-        }
-    }
+		if(head == null) {
+			System.out.println("List is empty!");
+		}
+		else {
+			DoubleLinkedListNode temp = head;
+			while(temp != null) {
+				System.out.println(((Player)temp.getData()).getName() + " " + ((Player)temp.getData()).getScore());
+				temp = temp.getNext();
+			}
+		}
+	}
+    
+    public Object getElement(int x) { // returns the item in the desired index
+		if(head == null)
+		{
+			System.out.println("List is empty");
+			return null;
+		}
+		else if(x > size() || x < 0 ){
+			System.out.println("Index is out of range");
+			return null;
+		}
+		else {
+			DoubleLinkedListNode temp = head;
+			int count = 1;
+			while(temp != null) {
+				if(x == count)
+					return temp.getData();
+				temp = temp.getNext();
+				count++;
+			}
+			return null;
+		}
 
-    public String writeAll() {
-        String result = "";
-        if (head == null) {
-            System.out.println("List is empty!");
-            return result;
-        } else {
-            DoubleLinkedListNode temp = tail;
-            while (temp != null) {
-                result += ((Player) temp.getData()).getName() + " " + ((Player) temp.getData()).getScore();
-                temp = temp.getPrev();
-            }
-            return result;
-        }
-    }
+	}
 
 }
 
