@@ -3,14 +3,18 @@ import enigma.event.TextMouseEvent;
 import enigma.event.TextMouseListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.Random;
+import java.util.Scanner;
 
 
 public class Columns {
 
 
 
-    public static enigma.console.Console cn = Enigma.getConsole("Columns", 75, 20, 15, 1);
+    public static enigma.console.Console cn = Enigma.getConsole("Columns");
 
     private TextMouseListener tmlis;
     private KeyListener klis;
@@ -19,14 +23,15 @@ public class Columns {
     private int mousex, mousey;
     private int keypr;
     private int rkey;
+    private int finishedSets = 0;
     private static int score = 0;
-    private static int transfer = 0;
+    private static int transfer = 1;
 
     private static Random rnd = new Random();
     private static SingleLinkedList box = new SingleLinkedList();
     private static DoubleLinkedList highScoreList = new DoubleLinkedList();
 
-    Columns() throws InterruptedException {
+    Columns() throws InterruptedException, FileNotFoundException {
         consoleClear();
         mouseListener();
 
@@ -43,6 +48,7 @@ public class Columns {
                 if (rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1 ) {
                     consoleClear();
                     printGameArea();
+                    keypr = 0;
 
 
                     while (true) {
@@ -52,6 +58,12 @@ public class Columns {
                             printGameArea();
 
                             mousepr = 0;
+                        }
+                        if (keypr == 1) {
+                            if(rkey == KeyEvent.VK_E) {
+                                generateHighScoreTable();
+                            }
+                            keypr = 0;
                         }
                         Thread.sleep(50);
                     }
@@ -152,7 +164,7 @@ public class Columns {
         cn.getTextWindow().setCursorPosition(0, 0);
     }
 
-    private static void printGameArea() { // 5 columns
+    private static void printGameArea() throws InterruptedException { // 5 columns
 
         for(int i = 1; i < 6; i++) {
             cn.getTextWindow().setCursorPosition(8 * i - 5, 0); // 10 yerine 8*
@@ -195,6 +207,22 @@ public class Columns {
             if(!box.isNumberCountFull(randomNumber)) {
                 box.add(randomNumber);
             }
+        }
+    }
+    private void generateHighScoreTable() throws FileNotFoundException {
+        consoleClear();
+        FileReader file = new FileReader("highscore.txt");
+        Scanner sc = new Scanner(file);
+        highScoreList.add(new Player("Player", score));
+        while(sc.hasNext()){
+            highScoreList.add(new Player(sc.next() + " " + sc.next(),Double.parseDouble(sc.next())));
+        }
+        sc.close();
+        score = 100*finishedSets + (score/transfer);
+        highScoreList.display();
+        PrintWriter pw = new PrintWriter("highscore.txt");
+        while(highScoreList.size() != 0) {
+            pw.print(highScoreList.writeAll());
         }
     }
 }

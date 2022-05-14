@@ -1,15 +1,15 @@
 public class Player {
-        private int score;
+        private double score;
         private String name;
 
-        Player(String name, int score){
+        Player(String name, double score){
             this.score = score;
             this.name = name;
         }
-        public int getScore() {
+        public double getScore() {
             return score;
         }
-        public void setScore(int score) {
+        public void setScore(double score) {
             this.score = score;
         }
         public String getName() {

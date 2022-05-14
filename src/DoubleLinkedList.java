@@ -9,7 +9,7 @@ public class DoubleLinkedList {
     }
 
     public void add(Player dataToAdd) {
-
+        boolean flag = true;
         if ((head == null) && (tail == null)) {
             DoubleLinkedListNode newNode = new DoubleLinkedListNode(dataToAdd);
             head = newNode;
@@ -17,9 +17,19 @@ public class DoubleLinkedList {
         } else {
             DoubleLinkedListNode newNode = new DoubleLinkedListNode(dataToAdd);
             DoubleLinkedListNode temp = head;
-            while (temp.getNext() != null && (Integer.compare((Integer) dataToAdd.getScore(), (Integer) ((Player) temp.getNext().getData()).getScore()) > 0)) {
+            while (temp.getNext() != null && (Double.compare((Double) dataToAdd.getScore(), (Double) ((Player) temp.getNext().getData()).getScore()) > 0)) {
                 temp = temp.getNext();
+            }/**
+            if (head.getNext() == null) {
+                if (Double.compare((Double) dataToAdd.getScore(), (Double) ((Player) temp.getData()).getScore()) > 0){
+                    head = newNode;
+                    tail = temp;
+                    head.setNext(temp);
+                    temp.setPrev(head);
+                    flag = false;
+                }
             }
+            */
             newNode.setPrev(temp);
             newNode.setNext(temp.getNext());
             if (temp.getNext() != null) {
@@ -66,9 +76,24 @@ public class DoubleLinkedList {
         } else {
             DoubleLinkedListNode temp = tail;
             while (temp != null) {
-                System.out.print(((Player) temp.getData()).getName() + " " + ((Player) temp.getData()).getScore());
+                System.out.println(((Player) temp.getData()).getName() + " " + ((Player) temp.getData()).getScore());
                 temp = temp.getPrev();
             }
+        }
+    }
+
+    public String writeAll() {
+        String result = "";
+        if (head == null) {
+            System.out.println("List is empty!");
+            return result;
+        } else {
+            DoubleLinkedListNode temp = tail;
+            while (temp != null) {
+                result += ((Player) temp.getData()).getName() + " " + ((Player) temp.getData()).getScore();
+                temp = temp.getPrev();
+            }
+            return result;
         }
     }
 
