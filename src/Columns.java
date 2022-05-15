@@ -254,32 +254,31 @@ public class Columns {
 		}
 	}
 	
-    private void generateHighScoreTable() {
+    private void generateHighScoreTable() { // Creates a highscore table and writes it ti the highscore.txt
         consoleClear();
+        score = 100*finishedSets + (score/transfer);
             
         try {    	
-        	FileReader file = new FileReader("highscore.txt");
-            Scanner sc = new Scanner(file);
-        	highScoreList.add(new Player("Player PlayerSurname", score));
+        	FileReader file = new FileReader("highscore.txt"); // Read the highscore.txt
+            Scanner sc = new Scanner(file); // Scanner for the highscore.txt
+        	highScoreList.add(new Player("Player PlayerSurname", score)); // add the player to the highscore
         	
         	
-            while(sc.hasNext()){
-                highScoreList.add(new Player(sc.next() + " " + sc.next(),Double.parseDouble(sc.next())));
+            while(sc.hasNext()){ // Read the highscore.txt
+                highScoreList.add(new Player(sc.next() + " " + sc.next(),Double.parseDouble(sc.next()))); // add the players to the highscore
             }
-            sc.close();
+            sc.close(); // Close the scanner
             
-            score = 100*finishedSets + (score/transfer);
-            
-            highScoreList.display();        
-            PrintWriter pw = new PrintWriter("highscore.txt");
+            highScoreList.display(); // Display the highscore  
+            PrintWriter pw = new PrintWriter("highscore.txt"); // open a print writer for the highscore
             
             for(int i = 1; i < highScoreList.size() + 1; i++) {
             	Player tempPlayer = (Player)highScoreList.getElement(i);
-            	pw.print(tempPlayer.getName() + " " + tempPlayer.getScore() + "\n");
+            	pw.print(tempPlayer.getName() + " " + tempPlayer.getScore() + "\n"); // print the highscore line by line
             }
             
-            pw.close();
-        }catch(Exception e) {
+            pw.close(); // close the print writer
+        }catch(Exception e) { // catch exception
         	System.out.println("There is not file such as highscore.txt");
         }       
     }
