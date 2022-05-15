@@ -3,7 +3,6 @@ import enigma.event.TextMouseEvent;
 import enigma.event.TextMouseListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.Random;
@@ -12,13 +11,13 @@ import java.util.Scanner;
 
 public class Columns {
 
+    public static enigma.console.Console cn = Enigma.getConsole("Columns", 70, 30, 20, 2);
 
-
-    public static enigma.console.Console cn = Enigma.getConsole("Columns");
-
+    // 
     private TextMouseListener tmlis;
     private KeyListener klis;
 
+    // Variables for game play
     private int mousepr;
     private int mousex, mousey;
     private int keypr;
@@ -27,28 +26,31 @@ public class Columns {
     private static int score = 0;
     private static int transfer = 1;
 
-    private static Random rnd = new Random();
+    // Box and High Score
     private static SingleLinkedList box = new SingleLinkedList();
     private static DoubleLinkedList highScoreList = new DoubleLinkedList();
+    
+    // Columns
     private static SingleLinkedList column1 = new SingleLinkedList();
 	private static SingleLinkedList column2 = new SingleLinkedList();
 	private static SingleLinkedList column3 = new SingleLinkedList();
 	private static SingleLinkedList column4 = new SingleLinkedList();
 	private static SingleLinkedList column5 = new SingleLinkedList();
 
-	Columns() throws InterruptedException, FileNotFoundException {
-		consoleClear();
-		mouseListener();
-		
+	Columns() throws InterruptedException {		
+		consoleClear();// An function to clear console
+		// Key listener for mouse and keyboard
+		mouseListener();		
 		generateBox();
-		createInitialColumns();
-		printGameArea();
+		createInitialColumns();		
 		
+		consoleClear();
+        printMenu();
 		
+		// Main game loop
 		while(true) {
-			consoleClear();
-            printMenu();
-
+			
+            // If key pressed
             if(keypr == 1) {
 
                 if (rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1) {
@@ -57,7 +59,7 @@ public class Columns {
                     keypr = 0;
 
                     while (true) {
-                    	if(rkey == KeyEvent.VK_B) { // if the B key is pressed, the element at the top of the box appears on the screen
+                    	if(rkey == KeyEvent.VK_B) { // If the B key is pressed, the element at the top of the box appears on the screen
                         	cn.getTextWindow().setCursorPosition(48, 10);
                     		System.out.print("| " + box.peek() + " |");
                     		rkey = 0;
@@ -93,7 +95,7 @@ public class Columns {
                     consoleClear();
                     exitMessage();
                     Thread.sleep(3000);
-                    break;
+                    System.exit(0);
                 }
             }
             keypr = 0;
@@ -103,21 +105,22 @@ public class Columns {
 	
 	private static void printColumn(SingleLinkedList column, int x) { // prints each number in the column to the screen, respectively.
 		for(int i = 0; i < column.size(); i ++) {
-			cn.getTextWindow().setCursorPosition(x, 3 + i);
-			int number = (int)column.getElement(i + 1);
-			System.out.print(number);
+			cn.getTextWindow().setCursorPosition(x - 1, 3 + i);
+			System.out.print("|" + (int)column.getElement(i + 1));
+			if((int)column.getElement(i + 1) != 10)
+				System.out.print(" ");
+			System.out.print("|");
 		}
 	}
 	
 	private void createInitialColumns() { // adds 5 random numbers to the each column.
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < 6; i++) {
 			column1.add(box.pop());
 			column2.add(box.pop());
 			column3.add(box.pop());
 			column4.add(box.pop());
 			column5.add(box.pop());
 		}
-		
 	}
 
 	private void mouseListener() {
@@ -155,8 +158,7 @@ public class Columns {
 		};
 		cn.getTextWindow().addKeyListener(klis);
 	}
-	
-	
+		
 	public static void printMenu() {
         cn.getTextWindow().setCursorPosition(15, 3);
         System.out.println("---------------------------------");
@@ -197,15 +199,16 @@ public class Columns {
 		cn.getTextWindow().setCursorPosition(0, 0);
 	}
 
-	private static void printGameArea() { // 5 columns
+	private static void printGameArea() {
 		
+		// This function creates playing area by using for loops
 		for(int i = 1; i < 6; i++) {
 			cn.getTextWindow().setCursorPosition(8 * i - 5, 0); 
 			System.out.print("+--+");
 			cn.getTextWindow().setCursorPosition(8 * i - 5, 1);
 			System.out.print("|C" + i + "|");
 			cn.getTextWindow().setCursorPosition(8 * i - 5, 2);
-			System.out.print("|--|");
+			System.out.print("+--+");
 		}
 		
 		cn.getTextWindow().setCursorPosition(46, 1);
@@ -251,26 +254,33 @@ public class Columns {
 		}
 	}
 	
-    private void generateHighScoreTable() throws FileNotFoundException {
+    private void generateHighScoreTable() {
         consoleClear();
-        FileReader file = new FileReader("highscore.txt");
-        Scanner sc = new Scanner(file);
-        highScoreList.add(new Player("Player PlayerSurname", score));
-        while(sc.hasNext()){
-            highScoreList.add(new Player(sc.next() + " " + sc.next(),Double.parseDouble(sc.next())));
-        }
-        sc.close();
-        
-        score = 100*finishedSets + (score/transfer);
-        
-        highScoreList.display();
-        
-        PrintWriter pw = new PrintWriter("highscore.txt");
-        
-        for(int i = 1; i < highScoreList.size() + 1; i++) {
-        	Player tempPlayer = (Player)highScoreList.getElement(i);
-        	pw.print(tempPlayer.getName() + " " + tempPlayer.getScore() + "\n");
-        }
-        pw.close();
+            
+        try {    	
+        	FileReader file = new FileReader("highscore.txt");
+            Scanner sc = new Scanner(file);
+        	highScoreList.add(new Player("Player PlayerSurname", score));
+        	
+        	
+            while(sc.hasNext()){
+                highScoreList.add(new Player(sc.next() + " " + sc.next(),Double.parseDouble(sc.next())));
+            }
+            sc.close();
+            
+            score = 100*finishedSets + (score/transfer);
+            
+            highScoreList.display();        
+            PrintWriter pw = new PrintWriter("highscore.txt");
+            
+            for(int i = 1; i < highScoreList.size() + 1; i++) {
+            	Player tempPlayer = (Player)highScoreList.getElement(i);
+            	pw.print(tempPlayer.getName() + " " + tempPlayer.getScore() + "\n");
+            }
+            
+            pw.close();
+        }catch(Exception e) {
+        	System.out.println("There is not file such as highscore.txt");
+        }       
     }
 }

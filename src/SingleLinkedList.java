@@ -72,7 +72,7 @@ public class SingleLinkedList {
 
 	public int findMin() {
 		if(head == null) {
-			//System.out.println("Linked list is empty!");
+			System.out.println("Linked list is empty!");
 			return Integer.MAX_VALUE;
 		}
 		else {
@@ -91,6 +91,7 @@ public class SingleLinkedList {
 	}
 
 	public Object peek() {
+		// This function returns last element of SLL
 		if(head == null) {
 			return 'X';
 		}
@@ -100,6 +101,7 @@ public class SingleLinkedList {
 	}
 
 	public Object pop() {
+		// This function returns last element of SLL and deletes it from SLL
 		if(head == null) {
 			System.out.print('X');
 			return null;

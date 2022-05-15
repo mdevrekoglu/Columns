@@ -8,7 +8,6 @@ public class DoubleLinkedList {
         tail = null;
     }
 
-
     public void add (Player dataToAdd) { // adds the inserted elements in order from largest to smallest
 		
 		if((head == null) && (tail == null)) {
@@ -106,9 +105,5 @@ public class DoubleLinkedList {
 			}
 			return null;
 		}
-
 	}
-
 }
-
-

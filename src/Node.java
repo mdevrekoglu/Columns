@@ -1,5 +1,4 @@
 public class Node {
-
 	// The node that we learned from lesson
 	private Node link;
 	private Object data;
