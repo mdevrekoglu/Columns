@@ -43,12 +43,14 @@ public class Columns {
 		mouseListener();		
 		generateBox();
 		createInitialColumns();		
-		
-		consoleClear();
-        printMenu();
+
+
+
 		
 		// Main game loop
 		while(true) {
+			consoleClear();
+			printMenu();
 			
             // If key pressed
             if(keypr == 1) {
@@ -75,13 +77,13 @@ public class Columns {
                         }
                         
                         if (keypr == 1) {
-                            if(rkey == KeyEvent.VK_E) {
+                            if(rkey == KeyEvent.VK_ESCAPE) {
                                 generateHighScoreTable();
                             }
                             keypr = 0;
                         }
                         
-                        Thread.sleep(500);
+                        Thread.sleep(50);
                     }
                 }
 
@@ -89,6 +91,19 @@ public class Columns {
                     consoleClear();
                     cn.getTextWindow().setCursorPosition(28, 0);
                     System.out.println("HOW TO PLAY?");
+					System.out.println("Press 'ESC' to return the menu");
+					keypr = 0;
+					while(true) {
+						if(keypr == 1){
+						if (rkey == KeyEvent.VK_ESCAPE) {
+							break;
+						}
+						keypr = 0;
+						}
+						Thread.sleep(50);
+					}
+
+
                 }
 
                 else if(rkey == KeyEvent.VK_3 || rkey == KeyEvent.VK_NUMPAD3){
