@@ -29,6 +29,7 @@ public class Columns {
     // Box and High Score
     private static SingleLinkedList box = new SingleLinkedList();
     private static DoubleLinkedList highScoreList = new DoubleLinkedList();
+	private static Player player;
     
     // Columns
     private static SingleLinkedList column1 = new SingleLinkedList();
@@ -40,7 +41,7 @@ public class Columns {
 	Columns() throws InterruptedException {		
 		consoleClear();// An function to clear console
 		// Key listener for mouse and keyboard
-		mouseListener();		
+		listener();
 		generateBox();
 		createInitialColumns();		
 
@@ -56,6 +57,8 @@ public class Columns {
             if(keypr == 1) {
 
                 if (rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1) {
+					consoleClear();
+					askForName();
                     consoleClear();
                     printGameArea();
                     keypr = 0;
@@ -81,6 +84,8 @@ public class Columns {
                                 generateHighScoreTable();
                             }
                             keypr = 0;
+							Thread.sleep(3000);
+							break;
                         }
                         
                         Thread.sleep(50);
@@ -138,7 +143,7 @@ public class Columns {
 		}
 	}
 
-	private void mouseListener() {
+	private void listener() {
 		tmlis = new TextMouseListener() {
 			public void mouseClicked(TextMouseEvent arg0) {
 			}
@@ -214,6 +219,7 @@ public class Columns {
 		cn.getTextWindow().setCursorPosition(0, 0);
 	}
 
+
 	private static void printGameArea() {
 		
 		// This function creates playing area by using for loops
@@ -230,7 +236,7 @@ public class Columns {
 		System.out.print("Transfer: " + transfer);
 		
 		cn.getTextWindow().setCursorPosition(46, 2);
-		System.out.print("Score   : " + score);
+		System.out.print("Score   : " + player.getScore());
 		
 		cn.getTextWindow().setCursorPosition(48, 8);
 		System.out.print(" BOX ");
@@ -268,15 +274,28 @@ public class Columns {
 			}
 		}
 	}
+
+	private void askForName(){
+		Scanner scan = new Scanner(System.in);
+		System.out.print("Please enter your name and surname: ");
+		String name = scan.nextLine();
+		System.out.print("Please enter your previous score: ");
+		double score = scan.nextDouble();
+		player = new Player(name, score);
+		scan.close();
+
+	}
 	
     private void generateHighScoreTable() { // Creates a highscore table and writes it ti the highscore.txt
         consoleClear();
-        score = 100*finishedSets + (score/transfer);
+		player.setScore(100*finishedSets + (player.getScore()/transfer));
+
             
         try {    	
         	FileReader file = new FileReader("highscore.txt"); // Read the highscore.txt
             Scanner sc = new Scanner(file); // Scanner for the highscore.txt
-        	highScoreList.add(new Player("Player PlayerSurname", score)); // add the player to the highscore
+			highScoreList = new DoubleLinkedList();
+        	highScoreList.add(player); // add the player to the highscore
         	
         	
             while(sc.hasNext()){ // Read the highscore.txt
