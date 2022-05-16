@@ -68,6 +68,7 @@ public class Columns {
                         	cn.getTextWindow().setCursorPosition(48, 10);
                     		System.out.print("| " + box.peek() + " |");
                     		rkey = 0;
+				keypr = 0;
                         }
                     	
                         if (mousepr == 1) {
