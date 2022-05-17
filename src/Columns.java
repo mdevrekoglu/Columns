@@ -32,11 +32,7 @@ public class Columns {
 	private static Player player;
     
     // Columns
-    private static SingleLinkedList column1 = new SingleLinkedList();
-	private static SingleLinkedList column2 = new SingleLinkedList();
-	private static SingleLinkedList column3 = new SingleLinkedList();
-	private static SingleLinkedList column4 = new SingleLinkedList();
-	private static SingleLinkedList column5 = new SingleLinkedList();
+    private static MultiLinkedList columns = new MultiLinkedList();
 
 	Columns() throws InterruptedException {		
 		consoleClear();// An function to clear console
@@ -68,6 +64,7 @@ public class Columns {
                         	cn.getTextWindow().setCursorPosition(48, 10);
                     		System.out.print("| " + box.peek() + " |");
                     		rkey = 0;
+							keypr = 0;
                         }
                     	
                         if (mousepr == 1) {
@@ -75,7 +72,6 @@ public class Columns {
                             box.pop();
                             printGameArea();
                             keypr =0;
-
                             mousepr = 0;
                         }
                         
@@ -122,24 +118,18 @@ public class Columns {
             Thread.sleep(50);
         }
 	}
-	
-	private static void printColumn(SingleLinkedList column, int x) { // prints each number in the column to the screen, respectively.
-		for(int i = 0; i < column.size(); i ++) {
-			cn.getTextWindow().setCursorPosition(x - 1, 3 + i);
-			System.out.print("|" + (int)column.getElement(i + 1));
-			if((int)column.getElement(i + 1) != 10)
-				System.out.print(" ");
-			System.out.print("|");
-		}
-	}
+
 	
 	private void createInitialColumns() { // adds 5 random numbers to the each column.
+		columns.addColumn(1); columns.addColumn(2); columns.addColumn(3);
+		columns.addColumn(4); columns.addColumn(5);
+
 		for(int i = 0; i < 6; i++) {
-			column1.add(box.pop());
-			column2.add(box.pop());
-			column3.add(box.pop());
-			column4.add(box.pop());
-			column5.add(box.pop());
+			columns.addNumber(1, (Integer) box.pop());
+			columns.addNumber(2, (Integer) box.pop());
+			columns.addNumber(3, (Integer) box.pop());
+			columns.addNumber(4, (Integer) box.pop());
+			columns.addNumber(5, (Integer) box.pop());
 		}
 	}
 
@@ -251,11 +241,7 @@ public class Columns {
 		System.out.print("+---+");
 		
 		// Printing initial columns on the screen
-		printColumn(column1, 4);
-		printColumn(column2, 12);
-		printColumn(column3, 20);
-		printColumn(column4, 28);
-		printColumn(column5, 36);
+		columns.printColumns(cn);
 		
 		cn.getTextWindow().setCursorPosition(0, 0);
 	}
