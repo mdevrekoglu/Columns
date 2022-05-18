@@ -18,16 +18,15 @@ public class Columns {
     private KeyListener klis;
 
     // Variables for game play
-    private int mousepr;
+    private int mousepr, mouserl;
     private int mousex, mousey;
     private int keypr;
     private int rkey;
     private int finishedSets = 0;
-    private static int score = 0;
     private static int transfer = 1;
 
     // Box and High Score
-    private static SingleLinkedList box = new SingleLinkedList();
+    private static SingleLinkedList box;
     private static DoubleLinkedList highScoreList = new DoubleLinkedList();
 	private static Player player;
     
@@ -40,9 +39,6 @@ public class Columns {
 		listener();
 		generateBox();
 		createInitialColumns();		
-
-
-
 		
 		// Main game loop
 		while(true) {
@@ -54,7 +50,13 @@ public class Columns {
 
                 if (rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1) {
 					consoleClear();
-					askForName();
+					
+					// Player operations
+					Scanner scan = new Scanner(System.in);
+		    		System.out.print("Please enter your name and surname: ");
+					player = new Player(scan.nextLine(), 0);
+					scan.close();
+										
                     consoleClear();
                     printGameArea();
                     keypr = 0;
@@ -68,11 +70,15 @@ public class Columns {
                         }
                     	
                         if (mousepr == 1) {
-                            cn.getTextWindow().setCursorPosition(mousex, mousey);
-                            box.pop();
-                            printGameArea();
                             keypr =0;
                             mousepr = 0;
+                            
+                            while(mouserl == 0) {
+                            	
+                            	
+                            	Thread.sleep(50);
+                            }
+                            mouserl = 0;
                         }
                         
                         if (keypr == 1) {
@@ -147,6 +153,13 @@ public class Columns {
 			}
 
 			public void mouseReleased(TextMouseEvent arg0) {
+				if (mouserl == 0) {
+					mouserl = 1;
+					mousex = arg0.getX();
+					mousey = arg0.getY();
+					cn.getTextWindow().setCursorPosition(mousex, mousey);
+					System.out.print("X");
+				}
 			}
 		};
 		cn.getTextWindow().addTextMouseListener(tmlis);
@@ -209,9 +222,7 @@ public class Columns {
 		cn.getTextWindow().setCursorPosition(0, 0);
 	}
 
-
-	private static void printGameArea() {
-		
+	private static void printGameArea() {		
 		// This function creates playing area by using for loops
 		for(int i = 1; i < 6; i++) {
 			cn.getTextWindow().setCursorPosition(8 * i - 5, 0); 
@@ -253,6 +264,7 @@ public class Columns {
 	}
 	
 	private void generateBox() { // Fills the box with 50 random numbers from 1-10
+		box = new SingleLinkedList();
 		while(box.size() < 50) {
 			int randomNumber = createRandomNumber(1,10); // Generates random numbers between 1 and 10 [1,10]
 			if(!box.isNumberCountFull(randomNumber)) { // if the same number is added to the box 5 times, it will not be added again
@@ -260,23 +272,11 @@ public class Columns {
 			}
 		}
 	}
-
-	private void askForName(){
-		Scanner scan = new Scanner(System.in);
-		System.out.print("Please enter your name and surname: ");
-		String name = scan.nextLine();
-		System.out.print("Please enter your previous score: ");
-		double score = scan.nextDouble();
-		player = new Player(name, score);
-		scan.close();
-
-	}
 	
     private void generateHighScoreTable() { // Creates a highscore table and writes it ti the highscore.txt
         consoleClear();
 		player.setScore(100*finishedSets + (player.getScore()/transfer));
-
-            
+    
         try {    	
         	FileReader file = new FileReader("highscore.txt"); // Read the highscore.txt
             Scanner sc = new Scanner(file); // Scanner for the highscore.txt

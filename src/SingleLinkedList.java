@@ -103,15 +103,13 @@ public class SingleLinkedList {
 	public Object pop() {
 		// This function returns last element of SLL and deletes it from SLL
 		if(head == null) {
-			System.out.print('X');
 			return null;
 		}
 		else{
-			System.out.print(head.getData());
 			Object retData = head.getData();
 			head = head.getLink();
 			return retData;
-		}	
+		}
 	}
 
 	public boolean isNumberCountFull(Object data) { // checks if there are 5 of the same number
