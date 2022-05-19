@@ -61,5 +61,57 @@ public class MultiLinkedList {
             }
             }
         }
-
+        public int getColumnSize(int column) {
+            if (head == null) {
+                System.out.println("List is empty.");
+                return 0;
+            }
+            else {
+                ColumnNode temp = head;
+                int count = 1;
+                switch (column) {
+                    case 1:
+                        NumberNode temp2 = temp.getDown();
+                        while (temp2.getNext() != null) {
+                            count++;
+                            temp2 = temp2.getNext();
+                        }
+                        return count;
+                    case 2:
+                        temp = temp.getRight();
+                        NumberNode temp3 = temp.getDown();
+                        while (temp3.getNext() != null) {
+                            count++;
+                            temp3 = temp3.getNext();
+                        }
+                        return count;
+                    case 3:
+                        temp = temp.getRight().getRight();
+                        NumberNode temp4 = temp.getDown();
+                        while (temp4.getNext() != null) {
+                            count++;
+                            temp4 = temp4.getNext();
+                        }
+                        return count;
+                    case 4:
+                        temp = temp.getRight().getRight().getRight();
+                        NumberNode temp5 = temp.getDown();
+                        while (temp5.getNext() != null) {
+                            count++;
+                            temp5 = temp5.getNext();
+                        }
+                        return count;
+                    case 5:
+                        temp = temp.getRight().getRight().getRight().getRight();
+                        NumberNode temp6 = temp.getDown();
+                        while (temp6.getNext() != null) {
+                            count++;
+                            temp6 = temp6.getNext();
+                        }
+                        return count;
+                    default:
+                        return count;
+                }
+            }
+        }
     }
