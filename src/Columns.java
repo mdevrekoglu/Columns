@@ -18,7 +18,7 @@ public class Columns {
     private KeyListener klis;
 
     // Variables for game play
-    private int mousepr, mouserl = 1;
+    private int mousepr, mouserl;
     private int mousex, mousey;
     private int keypr;
     private int rkey;
@@ -70,28 +70,15 @@ public class Columns {
                         }
                     	
                         if (mousepr == 1) {
-							if(mousex == 4 && mousey == columns.getColumnSize(1) + 3 && !box.isEmpty()) {
-								columns.addNumber(1, (Integer) box.peek());
-								mouserl = 0;
-							}
-							else if (mousex == 12 && mousey == columns.getColumnSize(2) + 3 && !box.isEmpty()) {
-								columns.addNumber(2, (Integer) box.peek());
-								mouserl = 0;
-							}
-							else if (mousex == 20 && mousey == columns.getColumnSize(3) + 3 && !box.isEmpty()) {
-								columns.addNumber(3, (Integer) box.peek());
-								mouserl = 0;
-							}
-							else if (mousex == 28 && mousey == columns.getColumnSize(4) + 3 && !box.isEmpty()) {
-								columns.addNumber(4, (Integer) box.peek());
-								mouserl = 0;
-							}
-							else if (mousex == 36 && mousey == columns.getColumnSize(5) + 3 && !box.isEmpty()) {
-								columns.addNumber(5, (Integer) box.peek());
-								mouserl = 0;
-							}
-                        	keypr =0;
+                            keypr =0;
                             mousepr = 0;
+                            
+                            while(mouserl == 0) {
+                            	
+                            	
+                            	Thread.sleep(50);
+                            }
+                            mouserl = 0;
                         }
                         
                         if (keypr == 1) {
@@ -170,11 +157,8 @@ public class Columns {
 					mouserl = 1;
 					mousex = arg0.getX();
 					mousey = arg0.getY();
-					cn.getTextWindow().setCursorPosition(mousex - 1, mousey);
-					if ((Integer) box.peek() == 10)
-					System.out.print("|" + box.pop() + "|");
-					else
-					System.out.print("|" + box.pop() + " |");
+					cn.getTextWindow().setCursorPosition(mousex, mousey);
+					System.out.print("X");
 				}
 			}
 		};
