@@ -13,7 +13,7 @@ public class Columns {
 
     public static enigma.console.Console cn = Enigma.getConsole("Columns", 70, 30, 20, 2);
 
-    // 
+    // Klis
     private TextMouseListener tmlis;
     private KeyListener klis;
 
@@ -36,9 +36,7 @@ public class Columns {
 	Columns() throws InterruptedException {		
 		consoleClear();// An function to clear console
 		// Key listener for mouse and keyboard
-		listener();
-		generateBox();
-		createInitialColumns();		
+		listener();	
 		
 		// Main game loop
 		while(true) {
@@ -49,6 +47,9 @@ public class Columns {
             if(keypr == 1) {
 
                 if (rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1) {
+        			generateBox();
+        			createInitialColumns();
+                    keypr = 0;
 					consoleClear();
 					
 					// Player operations
@@ -56,11 +57,11 @@ public class Columns {
 		    		System.out.print("Please enter your name and surname: ");
 					player = new Player(scan.nextLine(), 0);
 					scan.close();
-										
-                    consoleClear();
+					
                     printGameArea();
                     keypr = 0;
-
+                    
+                    // Main game loop
                     while (true) {
                     	if(rkey == KeyEvent.VK_B) { // If the B key is pressed, the element at the top of the box appears on the screen
                         	cn.getTextWindow().setCursorPosition(48, 10);
@@ -72,22 +73,54 @@ public class Columns {
                         if (mousepr == 1) {
                             keypr =0;
                             mousepr = 0;
+                            Boolean isNumberSelected = false;
+                            int firstX = mousex;
+                            int firstY = mousey;
+                
                             
-                            while(mouserl == 0) {
-                            	
-                            	
-                            	Thread.sleep(50);
+                            // cn.getTextWindow().setCursorPosition(8 * i - 5, 2); 
+                            // 3 - 11 - 19 - 27 - 35
+                            if((firstX + 4) % 8 == 0 && columns.sizeOfColumn((firstX + 4) / 8) >= firstY - 3) {                                
+                            	isNumberSelected = true;
+                            	columns.printeColoredColumn(cn, (firstX + 4) / 8, firstY - 3);
                             }
+                            
+                            while(mouserl == 0) {             	
+                            	Thread.sleep(50);
+                            	/*
+                            	if(mousepr == 1)
+                            		break;
+                            	*/
+                            }
+                            
+                            if(isNumberSelected) {
+                            	            	                         	
+                            	
+                            	
+                            	if((mousex + 4) % 8 == 0) {
+                            		//int firstColumn, int secondColumn, int element
+                            		                      		
+                            		columns.transfer((firstX + 4) / 8, (mousex + 4) / 8, firstY - 3);   		
+                            	}
+                            	else {
+                            		printGameArea();
+                            	}
+                            	
+                                  
+                            }
+                            
+                            
+                            
                             mouserl = 0;
                         }
                         
                         if (keypr == 1) {
                             if(rkey == KeyEvent.VK_ESCAPE) {
                                 generateHighScoreTable();
-                            }
-                            keypr = 0;
-							Thread.sleep(3000);
-							break;
+                                keypr = 0;
+    							Thread.sleep(3000);
+    							break;
+                            }                          
                         }
                         
                         Thread.sleep(50);
@@ -102,15 +135,13 @@ public class Columns {
 					keypr = 0;
 					while(true) {
 						if(keypr == 1){
-						if (rkey == KeyEvent.VK_ESCAPE) {
-							break;
-						}
-						keypr = 0;
+							if (rkey == KeyEvent.VK_ESCAPE) {
+								break;
+							}
+							keypr = 0;
 						}
 						Thread.sleep(50);
 					}
-
-
                 }
 
                 else if(rkey == KeyEvent.VK_3 || rkey == KeyEvent.VK_NUMPAD3){
@@ -157,8 +188,6 @@ public class Columns {
 					mouserl = 1;
 					mousex = arg0.getX();
 					mousey = arg0.getY();
-					cn.getTextWindow().setCursorPosition(mousex, mousey);
-					System.out.print("X");
 				}
 			}
 		};
@@ -211,7 +240,7 @@ public class Columns {
     }
 	
 	// Clear console
-	private static void consoleClear() {
+	public static void consoleClear() {
 		cn.getTextWindow().setCursorPosition(0, 0);
 		for (int i = 0; i < cn.getTextWindow().getRows(); i++) {
 			for (int j = 0; j < cn.getTextWindow().getColumns() - 1; j++)
@@ -222,7 +251,9 @@ public class Columns {
 		cn.getTextWindow().setCursorPosition(0, 0);
 	}
 
-	private static void printGameArea() {		
+	public static void printGameArea() {	
+        consoleClear();
+		
 		// This function creates playing area by using for loops
 		for(int i = 1; i < 6; i++) {
 			cn.getTextWindow().setCursorPosition(8 * i - 5, 0); 
