@@ -175,7 +175,8 @@ public class MultiLinkedList {
     				column1 = column1.getNext();
     			}
     			column1.setNext(null);
-			}  			
+			}
+			Columns.transfer++;
 		}
 		
 		else {
@@ -189,7 +190,7 @@ public class MultiLinkedList {
 		int diff = Math.abs(arr[element] - column2.getNumber());
 		
 		if(diff <= 1) {
-			
+			Columns.transfer++;
 			for(int i = element; i < counter; i++) {
 				NumberNode temp = new NumberNode(arr[i]);
 				

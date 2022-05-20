@@ -1,3 +1,4 @@
+s NaN
 fatih dicle 5000.0
 Tarik Deniz 521.07
 Sema Firat 378.24

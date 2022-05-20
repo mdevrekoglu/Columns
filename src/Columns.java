@@ -23,7 +23,7 @@ public class Columns {
     private int keypr;
     private int rkey;
     private int finishedSets = 0;
-    private static int transfer = 1;
+    public static int transfer = 0;
 
     // Box and High Score
     private static SingleLinkedList box;
