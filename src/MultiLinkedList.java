@@ -155,28 +155,29 @@ public class MultiLinkedList {
 		}
 		
 		
-		if(tempColumn2.getDown() == null) {
-			tempColumn2.setDown(new NumberNode(arr[element]));
-			column2 = tempColumn2.getDown();
-			for(int i = element + 1; i < counter; i++) {
-				NumberNode temp = new NumberNode(arr[i]);
-				
-				column2.setNext(temp);
-				column2 = column2.getNext();
+		if(tempColumn2.getDown() == null ) {
+			if(arr[element] == 1 || arr[element] == 10) {
+				tempColumn2.setDown(new NumberNode(arr[element]));
+				column2 = tempColumn2.getDown();
+				for (int i = element + 1; i < counter; i++) {
+					NumberNode temp = new NumberNode(arr[i]);
+
+					column2.setNext(temp);
+					column2 = column2.getNext();
+				}
+
+				column1 = tempColumn1.getDown();
+
+				if (element == 0) {
+					tempColumn1.setDown(null);
+				} else {
+					for (int i = 1; i < element; i++) {
+						column1 = column1.getNext();
+					}
+					column1.setNext(null);
+				}
+				Columns.transfer++;
 			}
-			
-			column1 = tempColumn1.getDown();
-			
-			if(element == 0) {
-				tempColumn1.setDown(null);
-			}
-			else {
-				for(int i = 1; i < element; i++) {
-    				column1 = column1.getNext();
-    			}
-    			column1.setNext(null);
-			}
-			Columns.transfer++;
 		}
 		
 		else {
