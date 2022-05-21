@@ -131,10 +131,107 @@ public class MultiLinkedList {
     
     public void transfer(int firstColumn, int secondColumn, int element) {
     	
+    	if(firstColumn != secondColumn) {
+    		ColumnNode tempColumn1 = head;
+    		ColumnNode tempColumn2 = head;
+    		
+    		
+    		for(int i = 1; i < firstColumn; i++)
+    			tempColumn1 = tempColumn1.getRight();
+    		
+    		for(int i = 1; i < secondColumn; i++)
+    			tempColumn2 = tempColumn2.getRight();
+    		
+    		NumberNode column1 = tempColumn1.getDown();
+    		NumberNode column2 = tempColumn2.getDown();
+    		
+    		
+    		int[] arr = new int[50];
+    		int counter = 0;
+    		while(column1 != null) {    			
+    			arr[counter] = column1.getNumber();
+    			column1 = column1.getNext();
+    			counter++;
+    		}
+    		
+    		
+    		if(tempColumn2.getDown() == null ) {
+    			if(arr[element] == 1 || arr[element] == 10) {
+    				tempColumn2.setDown(new NumberNode(arr[element]));
+    				column2 = tempColumn2.getDown();
+    				for (int i = element + 1; i < counter; i++) {
+    					NumberNode temp = new NumberNode(arr[i]);
+
+    					column2.setNext(temp);
+    					column2 = column2.getNext();
+    				}
+
+    				column1 = tempColumn1.getDown();
+
+    				if (element == 0) {
+    					tempColumn1.setDown(null);
+    				} else {
+    					for (int i = 1; i < element; i++) {
+    						column1 = column1.getNext();
+    					}
+    					column1.setNext(null);
+    				}
+    				Columns.transfer++;
+    			}
+    		}
+    		
+    		else {
+    		
+    		while(column2.getNext() != null) {
+    			column2 = column2.getNext();
+    		}
+    		
+    		
+    		
+    		int diff = Math.abs(arr[element] - column2.getNumber());
+    		
+    		if(diff <= 1) {
+    			Columns.transfer++;
+    			for(int i = element; i < counter; i++) {
+    				NumberNode temp = new NumberNode(arr[i]);
+    				
+    				column2.setNext(temp);
+    				column2 = column2.getNext();
+    			}
+    			
+    			column1 = tempColumn1.getDown();
+    			
+    			if(element == 0) {
+    				tempColumn1.setDown(null);
+    			}
+    			else {
+    				for(int i = 1; i < element; i++) {
+        				column1 = column1.getNext();
+        			}
+        			column1.setNext(null);
+    			}  			
+    			 			
+    		}
+    		}
+    		
+    		Columns.printGameArea();
+    		
+    	}
+    	else
+    		Columns.printGameArea();
+    	
+    	
+    	
+    }
+
+    public void checkMatching(int firstColumn, int secondColumn) {
     	
     	ColumnNode tempColumn1 = head;
 		ColumnNode tempColumn2 = head;
-		
+		boolean flag1 = true;
+		boolean flag2 = true;
+		int column1Size = sizeOfColumn(firstColumn);
+		int column2Size = sizeOfColumn(secondColumn);
 		
 		for(int i = 1; i < firstColumn; i++)
 			tempColumn1 = tempColumn1.getRight();
@@ -144,81 +241,65 @@ public class MultiLinkedList {
 		
 		NumberNode column1 = tempColumn1.getDown();
 		NumberNode column2 = tempColumn2.getDown();
-		
-		
-		int[] arr = new int[50];
-		int counter = 0;
-		while(column1 != null) {    			
-			arr[counter] = column1.getNumber();
-			column1 = column1.getNext();
-			counter++;
+    	
+		if(column1Size == 10) {
+			if(column1.getNumber() == 1) {
+				for(int i = 1; i <=10; i++) {
+					if(column1.getNumber() != i) {
+						flag1 = false;
+						break;
+					}
+					column1 = column1.getNext();
+				}
+			}
+			else if(column1.getNumber() == 10) {
+				for(int i = 10; i <=1; i--) {
+					if(column1.getNumber() != i) {
+						flag1 = false;
+						break;
+					}
+					column1 = column1.getNext();
+				}
+			}
+			else
+				flag1 = false;
 		}
+		else
+			flag1= false;
 		
-		
-		if(tempColumn2.getDown() == null ) {
-			if(arr[element] == 1 || arr[element] == 10) {
-				tempColumn2.setDown(new NumberNode(arr[element]));
-				column2 = tempColumn2.getDown();
-				for (int i = element + 1; i < counter; i++) {
-					NumberNode temp = new NumberNode(arr[i]);
-
-					column2.setNext(temp);
+		if(column2Size == 10) {
+			if(column2.getNumber() == 1) {
+				for(int i = 1; i <=10; i++) {
+					if(column2.getNumber() != i) {
+						flag2 = false;
+						break;
+					}
 					column2 = column2.getNext();
 				}
-
-				column1 = tempColumn1.getDown();
-
-				if (element == 0) {
-					tempColumn1.setDown(null);
-				} else {
-					for (int i = 1; i < element; i++) {
-						column1 = column1.getNext();
+			}
+			else if(column2.getNumber() == 10) {
+				for(int i = 10; i <=1; i--) {
+					if(column2.getNumber() != i) {
+						flag2 = false;
+						break;
 					}
-					column1.setNext(null);
+					column2 = column2.getNext();
 				}
-				Columns.transfer++;
 			}
+			else
+				flag2 = false;
+		}
+		else
+			flag2 = false;
+		
+		if(flag1 == true) {
+			tempColumn1.setDown(null);
+		}
+		if(flag2 == true) {
+			tempColumn2.setDown(null);
 		}
 		
-		else {
-		
-		while(column2.getNext() != null) {
-			column2 = column2.getNext();
-		}
-		
-		
-		
-		int diff = Math.abs(arr[element] - column2.getNumber());
-		
-		if(diff <= 1) {
-			Columns.transfer++;
-			for(int i = element; i < counter; i++) {
-				NumberNode temp = new NumberNode(arr[i]);
-				
-				column2.setNext(temp);
-				column2 = column2.getNext();
-			}
-			
-			column1 = tempColumn1.getDown();
-			
-			if(element == 0) {
-				tempColumn1.setDown(null);
-			}
-			else {
-				for(int i = 1; i < element; i++) {
-    				column1 = column1.getNext();
-    			}
-    			column1.setNext(null);
-			}  			
-			 			
-		}
-		}
-		
-		Columns.printGameArea();
-    	
-    	
-    	
-    	
-    	
+    	Columns.printGameArea();
     }
+
 }

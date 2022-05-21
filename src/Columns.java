@@ -80,10 +80,13 @@ public class Columns {
                             
                             // cn.getTextWindow().setCursorPosition(8 * i - 5, 2); 
                             // 3 - 11 - 19 - 27 - 35
-                            if((firstX + 4) % 8 == 0 && columns.sizeOfColumn((firstX + 4) / 8) >= firstY - 3) {                                
-                            	isNumberSelected = true;
-                            	columns.printeColoredColumn(cn, (firstX + 4) / 8, firstY - 3);
+                            if(firstY - 3 >= 0) {
+                            	if((firstX + 4) % 8 == 0 && columns.sizeOfColumn((firstX + 4) / 8) >= firstY - 3) {                                
+                                	isNumberSelected = true;
+                                	columns.printeColoredColumn(cn, (firstX + 4) / 8, firstY - 3);
+                                }
                             }
+                            
                             
                             while(mouserl == 0) {             	
                             	Thread.sleep(50);
@@ -100,7 +103,8 @@ public class Columns {
                             	if((mousex + 4) % 8 == 0) {
                             		//int firstColumn, int secondColumn, int element
                             		                      		
-                            		columns.transfer((firstX + 4) / 8, (mousex + 4) / 8, firstY - 3);   		
+                            		columns.transfer((firstX + 4) / 8, (mousex + 4) / 8, firstY - 3);   
+                            		columns.checkMatching((firstX + 4) / 8, (mousex + 4) / 8);
                             	}
                             	else {
                             		printGameArea();
