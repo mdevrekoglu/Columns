@@ -28,7 +28,7 @@ public class Columns {
     // Box and High Score
     private static SingleLinkedList box;
     private static DoubleLinkedList highScoreList = new DoubleLinkedList();
-	private static Player player;
+	public static Player player;
     
     // Columns
     private static MultiLinkedList columns = new MultiLinkedList();

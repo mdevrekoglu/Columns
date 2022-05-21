@@ -253,7 +253,7 @@ public class MultiLinkedList {
 				}
 			}
 			else if(column1.getNumber() == 10) {
-				for(int i = 10; i <=1; i--) {
+				for(int i = 10; i >= 1; i--) {
 					if(column1.getNumber() != i) {
 						flag1 = false;
 						break;
@@ -278,7 +278,7 @@ public class MultiLinkedList {
 				}
 			}
 			else if(column2.getNumber() == 10) {
-				for(int i = 10; i <=1; i--) {
+				for(int i = 10; i >=1; i--) {
 					if(column2.getNumber() != i) {
 						flag2 = false;
 						break;
@@ -294,9 +294,13 @@ public class MultiLinkedList {
 		
 		if(flag1 == true) {
 			tempColumn1.setDown(null);
+			double score = Columns.player.getScore();
+			Columns.player.setScore(score + 1000);
 		}
 		if(flag2 == true) {
 			tempColumn2.setDown(null);
+			double score = Columns.player.getScore();
+			Columns.player.setScore(score + 1000);
 		}
 		
     	Columns.printGameArea();
