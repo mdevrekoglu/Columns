@@ -154,6 +154,10 @@ public class SingleLinkedList {
 			}
 			return null;
 		}
-
+	}
+	public Boolean isEmpty() {
+		if (head == null)
+		return true;
+		else return false;
 	}
 }

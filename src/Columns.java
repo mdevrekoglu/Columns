@@ -33,6 +33,9 @@ public class Columns {
     private int rkey;
     private int finishedSets = 0;
     public static int transfer = 0;
+	private Boolean firstPress = false;
+	private Boolean secondPress = false;
+	private Boolean isZPressed = false;
 
     // Box and High Score
     private static SingleLinkedList box;
@@ -302,6 +305,13 @@ public class Columns {
     	if(rkey == KeyEvent.VK_B) { // If the B key is pressed, the element at the top of the box appears on the screen
         	cn.getTextWindow().setCursorPosition(48, 10);
     		System.out.print("| " + box.peek() + " |");
+			if (firstPress) {
+				secondPress = true;
+				firstPress = false;
+			}
+			if (!secondPress) {
+				firstPress = true;
+			}
     		rkey = 0;
 			keypr = 0;
         }
@@ -365,13 +375,15 @@ public class Columns {
         	columns.printeColoredColumn(cn, columnsX, columnsY);
         	prevColumnsX = columnsX;
         	prevColumnsY = columnsY;
+			isZPressed = true;
         	rkey = 0;
     		keypr = 0;
         }
         if(rkey == KeyEvent.VK_X) {
-        	if(prevColumnsX != -1 && prevColumnsY != -1) {
+        	if(prevColumnsX != -1 && prevColumnsY != -1 && isZPressed) {
         		columns.transfer(prevColumnsX,columnsX, prevColumnsY);   
         		columns.checkMatching(prevColumnsX, columnsX);
+				isZPressed = false;
         		/*
         		keyX = 4;
         		keyY = 3;
@@ -386,6 +398,11 @@ public class Columns {
         		System.out.println("<");
         		*/
         	}
+			if (secondPress && !box.isEmpty()) {
+				columns.addNumber(columnsX, (Integer) box.pop());
+				secondPress = false;
+				printGameArea();
+			}
     		rkey = 0;
     		keypr = 0;
         }
@@ -400,15 +417,19 @@ public class Columns {
             keypr =0;
             mousepr = 0;
             Boolean isNumberSelected = false;
+			Boolean isNumberOfBoxWanted = false;
             int firstX = mousex;
             int firstY = mousey;
             // cn.getTextWindow().setCursorPosition(8 * i - 5, 2); 
             // 3 - 11 - 19 - 27 - 35
             if(firstY - 3 >= 0) {
-            	if((firstX + 4) % 8 == 0 && (firstX + 4) / 8 <=5 && columns.sizeOfColumn((firstX + 4) / 8) >= firstY - 3) {                                
+            	if((firstX + 4) % 8 == 0 && (firstX + 4) / 8 <=5 && columns.sizeOfColumn((firstX + 4) / 8) > firstY - 3) {                                
                 	isNumberSelected = true;
                 	columns.printeColoredColumn(cn, (firstX + 4) / 8, firstY - 3);
                 }
+				if((firstX + 4) % 8 == 0 && (firstX + 4) / 8 <=5 && firstY == columns.sizeOfColumn((firstX + 4) / 8) + 3) {
+					isNumberOfBoxWanted = true;
+				}
             }
             while(mouserl == 0) {             	
             	Thread.sleep(50);
@@ -421,7 +442,7 @@ public class Columns {
             if(isNumberSelected) {
             	if((mousex + 4) % 8 == 0) {
             		//int firstColumn, int secondColumn, int element
-            		                      		
+
             		columns.transfer((firstX + 4) / 8, (mousex + 4) / 8, firstY - 3);   
             		columns.checkMatching((firstX + 4) / 8, (mousex + 4) / 8);
             	}
@@ -429,6 +450,12 @@ public class Columns {
             		printGameArea();
             	}
             }
+			if(isNumberOfBoxWanted) {
+				if(!box.isEmpty()) {
+					columns.addNumber((firstX + 4) / 8, (Integer) box.pop());
+					printGameArea();
+				}
+			}
             mouserl = 0;
         }
     }
