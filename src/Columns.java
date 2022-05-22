@@ -1,6 +1,9 @@
+import enigma.console.TextAttributes;
 import enigma.core.Enigma;
 import enigma.event.TextMouseEvent;
 import enigma.event.TextMouseListener;
+
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileReader;
@@ -20,6 +23,12 @@ public class Columns {
     // Variables for game play
     private int mousepr, mouserl;
     private int mousex, mousey;
+    private int keyX = 4;
+    private int keyY = 3;
+    private int columnsX = 1;
+    private int columnsY = 0;
+    private int prevColumnsX = -1;
+    private int prevColumnsY = -1;
     private int keypr;
     private int rkey;
     private int finishedSets = 0;
@@ -59,75 +68,26 @@ public class Columns {
 					scan.close();
 					
                     printGameArea();
-                    keypr = 0;
+                    TextAttributes coloredNumber = new TextAttributes(Color.GRAY, Color.CYAN);
+            		cn.getTextWindow().setCursorPosition(keyX -1, keyY);
+            		cn.getTextWindow().output(">", coloredNumber);
+            		cn.getTextWindow().setCursorPosition(keyX + 2, keyY);
+            		cn.getTextWindow().output("<", coloredNumber);
+
+                	keypr = 0;
+                	rkey = 0;
                     
                     // Main game loop
                     while (true) {
-                    	if(rkey == KeyEvent.VK_B) { // If the B key is pressed, the element at the top of the box appears on the screen
-                        	cn.getTextWindow().setCursorPosition(48, 10);
-                    		System.out.print("| " + box.peek() + " |");
-                    		rkey = 0;
-							keypr = 0;
-                        }
-                    	
-                        if (mousepr == 1) {
-                            keypr =0;
-                            mousepr = 0;
-                            Boolean isNumberSelected = false;
-                            int firstX = mousex;
-                            int firstY = mousey;
-                
-                            
-                            // cn.getTextWindow().setCursorPosition(8 * i - 5, 2); 
-                            // 3 - 11 - 19 - 27 - 35
-                            if(firstY - 3 >= 0) {
-                            	if((firstX + 4) % 8 == 0 && columns.sizeOfColumn((firstX + 4) / 8) >= firstY - 3) {                                
-                                	isNumberSelected = true;
-                                	columns.printeColoredColumn(cn, (firstX + 4) / 8, firstY - 3);
-                                }
-                            }
-                            
-                            
-                            while(mouserl == 0) {             	
-                            	Thread.sleep(50);
-                            	/*
-                            	if(mousepr == 1)
-                            		break;
-                            	*/
-                            }
-                            
-                            if(isNumberSelected) {
-                            	
-                            	
-                            	
-                            	if((mousex + 4) % 8 == 0) {
-                            		//int firstColumn, int secondColumn, int element
-                            		
-                            		columns.transfer((firstX + 4) / 8, (mousex + 4) / 8, firstY - 3);   
-                            		columns.checkMatching((firstX + 4) / 8, (mousex + 4) / 8);
-                            	}
-                            	else {
-                            		printGameArea();
-                            	}
-                            	
-                                
-                            }
-                            
-                            
-                            
-                            mouserl = 0;
-                        }
-                        
-                        if (keypr == 1) {
-                            if(rkey == KeyEvent.VK_ESCAPE) {
-                                generateHighScoreTable();
-                                keypr = 0;
-    							Thread.sleep(3000);
-    							break;
-                            }                          
-                        }
-                        
+                    	keyListeners();
+                        mouseListeners();
                         Thread.sleep(50);
+                        if(rkey == KeyEvent.VK_ESCAPE) {
+                        	generateHighScoreTable();
+                        	keypr = 0;
+                        	Thread.sleep(3000);
+                        	break;
+                        }
                     }
                 }
 
@@ -336,5 +296,140 @@ public class Columns {
         }catch(Exception e) { // catch exception
         	System.out.println("There is not file such as highscore.txt");
         }       
+    }
+
+    private void keyListeners() {
+    	if(rkey == KeyEvent.VK_B) { // If the B key is pressed, the element at the top of the box appears on the screen
+        	cn.getTextWindow().setCursorPosition(48, 10);
+    		System.out.print("| " + box.peek() + " |");
+    		rkey = 0;
+			keypr = 0;
+        }
+    	if(rkey == KeyEvent.VK_UP) {
+        	if(keyY > 3 ) {
+        		keyY = keyY - 1;
+        		columnsY = columnsY - 1;
+        		TextAttributes coloredNumber = new TextAttributes(Color.GRAY, Color.CYAN);
+        		printGameArea();
+        		cn.getTextWindow().setCursorPosition(keyX -1, keyY);
+        		cn.getTextWindow().output(">", coloredNumber);
+        		cn.getTextWindow().setCursorPosition(keyX + 2, keyY);
+        		cn.getTextWindow().output("<", coloredNumber);
+        	}
+        	rkey = 0;
+    		keypr = 0;
+        }
+        if(rkey == KeyEvent.VK_DOWN ) {
+        	if(keyY > 2 && keyY <= columns.sizeOfColumn(columnsX) + 1) {
+        		keyY = keyY + 1;
+        		columnsY = columnsY + 1;
+        		TextAttributes coloredNumber = new TextAttributes(Color.GRAY, Color.CYAN);
+        		printGameArea();
+        		cn.getTextWindow().setCursorPosition(keyX -1, keyY);
+        		cn.getTextWindow().output(">", coloredNumber);
+        		cn.getTextWindow().setCursorPosition(keyX + 2, keyY);
+        		cn.getTextWindow().output("<", coloredNumber);
+        	}
+        	rkey = 0;
+    		keypr = 0;
+        }
+        if(rkey == KeyEvent.VK_RIGHT) {
+        	if(keyX < 35 && columnsX < 5) {
+        		keyX= keyX + 8;
+        		columnsX++;
+        		TextAttributes coloredNumber = new TextAttributes(Color.GRAY, Color.CYAN);
+        		printGameArea();
+        		cn.getTextWindow().setCursorPosition(keyX -1, keyY);
+        		cn.getTextWindow().output(">", coloredNumber);
+        		cn.getTextWindow().setCursorPosition(keyX + 2, keyY);
+        		cn.getTextWindow().output("<", coloredNumber);
+        	}
+        	rkey = 0;
+    		keypr = 0;
+        }
+        if(rkey == KeyEvent.VK_LEFT ) {
+        	if(keyX > 3 && columnsX > 1) {
+        		keyX = keyX - 8;
+        		columnsX--;
+        		TextAttributes coloredNumber = new TextAttributes(Color.GRAY, Color.CYAN);
+        		printGameArea();
+        		cn.getTextWindow().setCursorPosition(keyX -1, keyY);
+        		cn.getTextWindow().output(">", coloredNumber);
+        		cn.getTextWindow().setCursorPosition(keyX + 2, keyY);
+        		cn.getTextWindow().output("<", coloredNumber);
+        	}
+        	rkey = 0;
+    		keypr = 0;
+        }
+        if(rkey == KeyEvent.VK_Z) {
+        	columns.printeColoredColumn(cn, columnsX, columnsY);
+        	prevColumnsX = columnsX;
+        	prevColumnsY = columnsY;
+        	rkey = 0;
+    		keypr = 0;
+        }
+        if(rkey == KeyEvent.VK_X) {
+        	if(prevColumnsX != -1 && prevColumnsY != -1) {
+        		columns.transfer(prevColumnsX,columnsX, prevColumnsY);   
+        		columns.checkMatching(prevColumnsX, columnsX);
+        		/*
+        		keyX = 4;
+        		keyY = 3;
+        		columnsX = 1;
+        		columnsY = 0;
+        		prevColumnsX = -1;
+        		prevColumnsY= -1;
+        		printGameArea();
+        		cn.getTextWindow().setCursorPosition(keyX -1, keyY);
+        		System.out.println(">");
+        		cn.getTextWindow().setCursorPosition(keyX + 2, keyY);
+        		System.out.println("<");
+        		*/
+        	}
+    		rkey = 0;
+    		keypr = 0;
+        }
+        else {
+        	rkey = 0;
+            keypr = 0;
+        }
+    }
+
+    private void mouseListeners() throws InterruptedException {
+    	if (mousepr == 1) {
+            keypr =0;
+            mousepr = 0;
+            Boolean isNumberSelected = false;
+            int firstX = mousex;
+            int firstY = mousey;
+            // cn.getTextWindow().setCursorPosition(8 * i - 5, 2); 
+            // 3 - 11 - 19 - 27 - 35
+            if(firstY - 3 >= 0) {
+            	if((firstX + 4) % 8 == 0 && (firstX + 4) / 8 <=5 && columns.sizeOfColumn((firstX + 4) / 8) >= firstY - 3) {                                
+                	isNumberSelected = true;
+                	columns.printeColoredColumn(cn, (firstX + 4) / 8, firstY - 3);
+                }
+            }
+            while(mouserl == 0) {             	
+            	Thread.sleep(50);
+            	/*
+            	if(mousepr == 1)
+            		break;
+            	*/
+            }
+            
+            if(isNumberSelected) {
+            	if((mousex + 4) % 8 == 0) {
+            		//int firstColumn, int secondColumn, int element
+            		                      		
+            		columns.transfer((firstX + 4) / 8, (mousex + 4) / 8, firstY - 3);   
+            		columns.checkMatching((firstX + 4) / 8, (mousex + 4) / 8);
+            	}
+            	else {
+            		printGameArea();
+            	}
+            }
+            mouserl = 0;
+        }
     }
 }
