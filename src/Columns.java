@@ -41,7 +41,10 @@ public class Columns {
     private static SingleLinkedList box;
     private static DoubleLinkedList highScoreList = new DoubleLinkedList();
 	public static Player player;
-    
+	
+    // Additional variable
+	private static Stack pistiBox = new Stack(52);
+	
     // Columns
     private static MultiLinkedList columns = new MultiLinkedList();
 
@@ -86,9 +89,17 @@ public class Columns {
     					
     					// Player operations
     					Scanner scan = new Scanner(System.in);
-    		    		System.out.print("Please enter your name and surname: ");
-    					player = new Player(scan.nextLine(), 0);
+    					String name;
+    		    		do {
+    		    			consoleClear();
+    		    			System.out.print("Please enter your name and surname: ");
+    		    			name = scan.nextLine();
+        					
+    		    		}while(name.trim().split(" ").length != 2);   					
+    					
+    					player = new Player(name, 0);
     					scan.close();
+    					
     					
                         printGameArea();
                         TextAttributes coloredNumber = new TextAttributes(Color.GRAY, Color.CYAN);
@@ -104,20 +115,20 @@ public class Columns {
                         	keyListeners();
                             mouseListeners();
                             Thread.sleep(50);
-                            if(rkey == KeyEvent.VK_ESCAPE) {
+                            if(rkey == KeyEvent.VK_ESCAPE || player.getScore() == 5000) {
                             	generateHighScoreTable();
-                            	keypr = 0;
-                            	Thread.sleep(3000);
+                            	keypr = rkey = 0;
+                            	while(rkey != KeyEvent.VK_ESCAPE ) {
+                            		Thread.sleep(200);
+                            	}
+                            	keypr = rkey = 0;
                             	break;
                             }
-                        }
-                		
-                		
-                		
-                		
-                		
+                        }           		
                 	}
                 	else {
+                		consoleClear();
+                		
                 		
                 		
                 		System.out.println("Welcome to pisti");
@@ -307,7 +318,8 @@ public class Columns {
 	
     private void generateHighScoreTable() { // Creates a highscore table and writes it ti the highscore.txt
         consoleClear();
-		player.setScore(100*finishedSets + (player.getScore()/transfer));
+        finishedSets = (int)player.getScore() / 1000;
+ 		player.setScore(100*finishedSets + (player.getScore()/transfer));
     
         try {    	
         	FileReader file = new FileReader("highscore.txt"); // Read the highscore.txt
@@ -410,6 +422,7 @@ public class Columns {
         	prevColumnsX = columnsX;
         	prevColumnsY = columnsY;
 			isZPressed = true;
+			secondPress = false;
         	rkey = 0;
     		keypr = 0;
         }
@@ -432,9 +445,10 @@ public class Columns {
         		System.out.println("<");
         		*/
         	}
-			if (secondPress && !box.isEmpty()) {
+        	if (secondPress && !box.isEmpty() && Math.abs((int) box.peek() - columns.getLastNumber(columnsX)) <= 1) {
 				columns.addNumber(columnsX, (Integer) box.pop());
 				secondPress = false;
+				columns.checkMatching(columnsX);
 				printGameArea();
 			}
     		rkey = 0;
@@ -461,7 +475,7 @@ public class Columns {
                 	isNumberSelected = true;
                 	columns.printeColoredColumn(cn, (firstX + 4) / 8, firstY - 3);
                 }
-				if((firstX + 4) % 8 == 0 && (firstX + 4) / 8 <=5 && firstY == columns.sizeOfColumn((firstX + 4) / 8) + 3) {
+            	 if((firstX + 4) % 8 == 0 && (firstX + 4) / 8 <=5 && firstY == columns.sizeOfColumn((firstX + 4) / 8) + 3 && Math.abs((int) box.peek() - columns.getLastNumber((firstX + 4) / 8)) <= 1) {
 					isNumberOfBoxWanted = true;
 				}
             }
@@ -487,10 +501,31 @@ public class Columns {
 			if(isNumberOfBoxWanted) {
 				if(!box.isEmpty()) {
 					columns.addNumber((firstX + 4) / 8, (Integer) box.pop());
+					columns.checkMatching((firstX + 4) / 8);
 					printGameArea();
 				}
 			}
             mouserl = 0;
         }
     }
+
+    private void fillPistiBox() {
+    	for(int i = 1; i <= 10; i++) {
+    		//int number, String type, TextAttributes coloredNumber
+    		// heard, diamond, Club, Spade
+    		
+    		pistiBox.push(new Card(Integer.toString(i), "Spade", null));
+    	}
+    	
+    	
+    	
+    	
+    	
+    	
+    }
+
+
+
+
+
 }

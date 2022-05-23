@@ -305,5 +305,67 @@ public class MultiLinkedList {
 		
     	Columns.printGameArea();
     }
+    
+    public void checkMatching(int column) {
 
+        ColumnNode tempColumn1 = head;
+        boolean flag1 = true;
+        int column1Size = sizeOfColumn(column);
+
+        for(int i = 1; i < column; i++)
+            tempColumn1 = tempColumn1.getRight();
+
+
+        NumberNode column1 = tempColumn1.getDown();
+
+        if(column1Size == 10) {
+            if(column1.getNumber() == 1) {
+                for(int i = 1; i <=10; i++) {
+                    if(column1.getNumber() != i) {
+                        flag1 = false;
+                        break;
+                    }
+                    column1 = column1.getNext();
+                }
+            }
+            else if(column1.getNumber() == 10) {
+                for(int i = 10; i >= 1; i--) {
+                    if(column1.getNumber() != i) {
+                        flag1 = false;
+                        break;
+                    }
+                    column1 = column1.getNext();
+                }
+            }
+            else
+                flag1 = false;
+        }
+        else
+            flag1= false;
+
+
+        if(flag1 == true) {
+            tempColumn1.setDown(null);
+            double score = Columns.player.getScore();
+            Columns.player.setScore(score + 1000);
+        }
+
+
+        Columns.printGameArea();
+    }
+
+    public int getLastNumber(int column) {
+        ColumnNode temp = head;
+        for(int i = 1; i < column; i++) {
+                temp = temp.getRight();
+        }
+        if (sizeOfColumn(column) != 0) {
+            NumberNode temp2 = temp.getDown();
+            for (int i = 1; i < sizeOfColumn(column); i++) {
+                temp2 = temp2.getNext();
+            }
+            return temp2.getNumber();
+        }
+        else return -1;
+    }
 }
