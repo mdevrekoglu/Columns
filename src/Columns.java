@@ -59,39 +59,73 @@ public class Columns {
             if(keypr == 1) {
 
                 if (rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1) {
-        			generateBox();
-        			createInitialColumns();
-                    keypr = 0;
-					consoleClear();
-					
-					// Player operations
-					Scanner scan = new Scanner(System.in);
-		    		System.out.print("Please enter your name and surname: ");
-					player = new Player(scan.nextLine(), 0);
-					scan.close();
-					
-                    printGameArea();
-                    TextAttributes coloredNumber = new TextAttributes(Color.GRAY, Color.CYAN);
-            		cn.getTextWindow().setCursorPosition(keyX -1, keyY);
-            		cn.getTextWindow().output(">", coloredNumber);
-            		cn.getTextWindow().setCursorPosition(keyX + 2, keyY);
-            		cn.getTextWindow().output("<", coloredNumber);
+                	
+                	rkey = keypr = 0;
+                	consoleClear();
+                	System.out.println("\n\n\n\n");
+                	System.out.println("                        Please select a game mode");
+                	System.out.println("\n\n");
+                	System.out.println("                               1-Classic");
+                	System.out.println("                               2-Pisti");
+                	do {
+                		if(keypr == 1) {
+                			keypr = 0;
+                		}
+                		Thread.sleep(50);         		
+                		
+                	}while(rkey != KeyEvent.VK_1 && rkey != KeyEvent.VK_NUMPAD1
+                			&& rkey != KeyEvent.VK_2 && rkey != KeyEvent.VK_NUMPAD2);
+                	
+                	
+                	if(rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1) {
+                		
+                		generateBox();
+            			createInitialColumns();
+                        keypr = 0;
+    					consoleClear();
+    					
+    					// Player operations
+    					Scanner scan = new Scanner(System.in);
+    		    		System.out.print("Please enter your name and surname: ");
+    					player = new Player(scan.nextLine(), 0);
+    					scan.close();
+    					
+                        printGameArea();
+                        TextAttributes coloredNumber = new TextAttributes(Color.GRAY, Color.CYAN);
+                		cn.getTextWindow().setCursorPosition(keyX -1, keyY);
+                		cn.getTextWindow().output(">", coloredNumber);
+                		cn.getTextWindow().setCursorPosition(keyX + 2, keyY);
+                		cn.getTextWindow().output("<", coloredNumber);
 
-                	keypr = 0;
-                	rkey = 0;
-                    
-                    // Main game loop
-                    while (true) {
-                    	keyListeners();
-                        mouseListeners();
-                        Thread.sleep(50);
-                        if(rkey == KeyEvent.VK_ESCAPE) {
-                        	generateHighScoreTable();
-                        	keypr = 0;
-                        	Thread.sleep(3000);
-                        	break;
+                    	keypr = rkey = 0;
+                        
+                        // Main game loop
+                        while (true) {
+                        	keyListeners();
+                            mouseListeners();
+                            Thread.sleep(50);
+                            if(rkey == KeyEvent.VK_ESCAPE) {
+                            	generateHighScoreTable();
+                            	keypr = 0;
+                            	Thread.sleep(3000);
+                            	break;
+                            }
                         }
-                    }
+                		
+                		
+                		
+                		
+                		
+                	}
+                	else {
+                		
+                		
+                		System.out.println("Welcome to pisti");
+                		Thread.sleep(5000);
+                		
+                		
+                	}            	
+        			
                 }
 
                 else if(rkey == KeyEvent.VK_2 || rkey == KeyEvent.VK_NUMPAD2){

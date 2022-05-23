@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Player {
         private double score;
         private String name;
