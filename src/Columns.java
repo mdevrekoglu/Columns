@@ -39,11 +39,12 @@ public class Columns {
 
     // Box and High Score
     private static SingleLinkedList box;
-    private static DoubleLinkedList highScoreList = new DoubleLinkedList();
+    private static DoubleLinkedList highScoreList;
 	public static Player player;
 	
     // Additional variable
-	private static Stack pistiBox = new Stack(52);
+	private static Stack pistiBox;
+	private static Stack pool;
 	
     // Columns
     private static MultiLinkedList columns = new MultiLinkedList();
@@ -127,7 +128,20 @@ public class Columns {
                         }           		
                 	}
                 	else {
+						int score = 0;
                 		consoleClear();
+						fillPistiBox();
+						displayPisti(score);
+
+
+						while(true){
+
+							break;
+
+
+
+
+						}
                 		
                 		
                 		
@@ -510,19 +524,50 @@ public class Columns {
     }
 
     private void fillPistiBox() {
+		pistiBox = new Stack(52);
+		pool = new Stack(52);
+
+		// Numberts 1 to 10
     	for(int i = 1; i <= 10; i++) {
-    		//int number, String type, TextAttributes coloredNumber
-    		// heard, diamond, Club, Spade
-    		
-    		pistiBox.push(new Card(Integer.toString(i), "Spade", null));
+    		pistiBox.push(new Card(Integer.toString(i), "Spade", new TextAttributes(Color.WHITE, Color.BLACK)));//black
+			pistiBox.push(new Card(Integer.toString(i), "Club", new TextAttributes(Color.WHITE, Color.BLACK)));//black
+			pistiBox.push(new Card(Integer.toString(i), "Diamond", new TextAttributes(Color.RED, Color.BLACK)));//red
+			pistiBox.push(new Card(Integer.toString(i), "Heard", new TextAttributes(Color.RED, Color.BLACK)));//red
     	}
-    	
-    	
-    	
-    	
-    	
-    	
+
+		// Joker
+    	pistiBox.push(new Card("Joker", "Spade", new TextAttributes(Color.WHITE, Color.BLACK)));
+		pistiBox.push(new Card("Joker", "Club", new TextAttributes(Color.WHITE, Color.BLACK)));
+		pistiBox.push(new Card("Joker", "Diamond", new TextAttributes(Color.RED, Color.BLACK)));
+		pistiBox.push(new Card("Joker", "Heard", new TextAttributes(Color.RED, Color.BLACK)));
+
+		// Queen
+		pistiBox.push(new Card("Queen", "Spade", new TextAttributes(Color.WHITE, Color.BLACK)));
+		pistiBox.push(new Card("Queen", "Club", new TextAttributes(Color.WHITE, Color.BLACK)));
+		pistiBox.push(new Card("Queen", "Diamond", new TextAttributes(Color.RED, Color.BLACK)));
+		pistiBox.push(new Card("Queen", "Heard", new TextAttributes(Color.RED, Color.BLACK)));
+
+		// King
+		pistiBox.push(new Card("King", "Spade", new TextAttributes(Color.WHITE, Color.BLACK)));
+		pistiBox.push(new Card("King", "Club", new TextAttributes(Color.WHITE, Color.BLACK)));
+		pistiBox.push(new Card("King", "Diamond", new TextAttributes(Color.RED, Color.BLACK)));
+		pistiBox.push(new Card("King", "Heard", new TextAttributes(Color.RED, Color.BLACK)));
+
+		pistiBox.shuffle();
     }
+
+	private void displayPisti(int score){
+
+		cn.getTextWindow().setCursorPosition(28, 9);
+		System.out.println("+-----------+");
+		cn.getTextWindow().setCursorPosition(28, 10);
+		System.out.println(String.format("|%-11s|", pool.peek()));
+		cn.getTextWindow().setCursorPosition(28, 11);
+		System.out.println("+-----------+");
+
+
+
+	}
 
 
 
