@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class Columns {
 
-    public static enigma.console.Console cn = Enigma.getConsole("Columns", 70, 30, 20, 2);
+    public static enigma.console.Console cn = Enigma.getConsole("Columns");
 
     // Klis
     private TextMouseListener tmlis;
@@ -303,9 +303,9 @@ public class Columns {
 		System.out.print("+---+");
 		
 		cn.getTextWindow().setCursorPosition(48, 10);
-		if (!box.isEmpty() && firstPress && (int) box.peek() != 10)
+		if (!box.isEmpty() && (firstPress || secondPress) && (int) box.peek() != 10)
 			System.out.print("| " + box.peek() + " |");
-		else if (!box.isEmpty() && (int) box.peek() == 10 && firstPress)
+		else if (!box.isEmpty() && (int) box.peek() == 10 && (firstPress || secondPress))
 			System.out.print("|" + box.peek() + " |");
 		else
 			System.out.print("| " + " " + " |");
