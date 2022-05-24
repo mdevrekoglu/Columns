@@ -33,8 +33,8 @@ public class Columns {
     private int rkey;
     private int finishedSets = 0;
     public static int transfer = 0;
-	private Boolean firstPress = false;
-	private Boolean secondPress = false;
+	private static Boolean firstPress = false;
+	private static Boolean secondPress = false;
 	private Boolean isZPressed = false;
 
     // Box and High Score
@@ -303,7 +303,12 @@ public class Columns {
 		System.out.print("+---+");
 		
 		cn.getTextWindow().setCursorPosition(48, 10);
-		System.out.print("| " + " " + " |");
+		if (!box.isEmpty() && firstPress && (int) box.peek() != 10)
+			System.out.print("| " + box.peek() + " |");
+		else if (!box.isEmpty() && (int) box.peek() == 10 && firstPress)
+			System.out.print("|" + box.peek() + " |");
+		else
+			System.out.print("| " + " " + " |");
 		
 		cn.getTextWindow().setCursorPosition(48, 11);
 		System.out.print("+---+");
@@ -363,8 +368,7 @@ public class Columns {
 
     private void keyListeners() {
     	if(rkey == KeyEvent.VK_B) { // If the B key is pressed, the element at the top of the box appears on the screen
-        	cn.getTextWindow().setCursorPosition(48, 10);
-    		System.out.print("| " + box.peek() + " |");
+        	
 			if (firstPress) {
 				secondPress = true;
 				firstPress = false;
@@ -372,6 +376,7 @@ public class Columns {
 			if (!secondPress) {
 				firstPress = true;
 			}
+			printGameArea();
     		rkey = 0;
 			keypr = 0;
         }
@@ -462,6 +467,7 @@ public class Columns {
         	if (secondPress && !box.isEmpty() && Math.abs((int) box.peek() - columns.getLastNumber(columnsX)) <= 1) {
 				columns.addNumber(columnsX, (Integer) box.pop());
 				secondPress = false;
+				firstPress = false;
 				columns.checkMatching(columnsX);
 				printGameArea();
 			}
@@ -489,7 +495,7 @@ public class Columns {
                 	isNumberSelected = true;
                 	columns.printeColoredColumn(cn, (firstX + 4) / 8, firstY - 3);
                 }
-            	 if((firstX + 4) % 8 == 0 && (firstX + 4) / 8 <=5 && firstY == columns.sizeOfColumn((firstX + 4) / 8) + 3 && Math.abs((int) box.peek() - columns.getLastNumber((firstX + 4) / 8)) <= 1) {
+            	if((firstX + 4) % 8 == 0 && (firstX + 4) / 8 <=5 && firstY == columns.sizeOfColumn((firstX + 4) / 8) + 3 && Math.abs((int) box.peek() - columns.getLastNumber((firstX + 4) / 8)) <= 1) {
 					isNumberOfBoxWanted = true;
 				}
             }
@@ -516,6 +522,7 @@ public class Columns {
 				if(!box.isEmpty()) {
 					columns.addNumber((firstX + 4) / 8, (Integer) box.pop());
 					columns.checkMatching((firstX + 4) / 8);
+					firstPress = false;
 					printGameArea();
 				}
 			}
