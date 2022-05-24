@@ -38,8 +38,8 @@ public class Stack {
 			return elements[top];
 		}		
 		else {
-			System.out.println("There is no element in stack");
-			return null;
+			//System.out.println("There is no element in stack");
+			return new Card(" ", " ");
 		}
 	}
 	

@@ -2,19 +2,24 @@ import enigma.console.TextAttributes;
 import enigma.core.Enigma;
 import enigma.event.TextMouseEvent;
 import enigma.event.TextMouseListener;
-
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Scanner;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 
 public class Columns {
 
-    public static enigma.console.Console cn = Enigma.getConsole("Columns");
+    public static enigma.console.Console cn = Enigma.getConsole("Columns", 70, 30, 20, 2);
 
     // Klis
     private TextMouseListener tmlis;
@@ -42,16 +47,11 @@ public class Columns {
     private static DoubleLinkedList highScoreList;
 	public static Player player;
 	
-    // Additional variable
-	private static Stack pistiDect;
-	private static Stack poolDect;
-	private static Stack playerDect;
-	private static Stack computerDect;
-	
+
     // Columns
     private static MultiLinkedList columns = new MultiLinkedList();
 
-	Columns() throws InterruptedException {		
+	Columns() throws InterruptedException, UnsupportedAudioFileException, IOException, LineUnavailableException {		
 		consoleClear();// An function to clear console
 		// Key listener for mouse and keyboard
 		listener();	
@@ -81,7 +81,7 @@ public class Columns {
                 		
                 	}while(rkey != KeyEvent.VK_1 && rkey != KeyEvent.VK_NUMPAD1
                 			&& rkey != KeyEvent.VK_2 && rkey != KeyEvent.VK_NUMPAD2);
-                	
+               						
                 	
                 	if(rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1) {
                 		
@@ -129,27 +129,12 @@ public class Columns {
                             }
                         }           		
                 	}
-                	else {
-						int score = 0;
-                		consoleClear();
-						fillPistiBoxs();
-						displayPisti(score);
+                	else{
 
-
-						while(pistiDect.size() == 0){
-
-							break;
-
-
-
-
-						}
-                		
-                		
-                		
-
-                		
-                	}            	
+						new Pisti();						
+					}		
+						
+          	
         			
                 }
 
@@ -480,8 +465,9 @@ public class Columns {
         }
     }
 
-    private void mouseListeners() throws InterruptedException {
+    private void mouseListeners() throws InterruptedException, UnsupportedAudioFileException, IOException, LineUnavailableException {
     	if (mousepr == 1) {
+			clickSound();
             keypr =0;
             mousepr = 0;
             Boolean isNumberSelected = false;
@@ -530,54 +516,15 @@ public class Columns {
         }
     }
 
-    private void fillPistiBoxs() {
-		pistiDect = new Stack(52);
-		poolDect = new Stack(52);
-		playerDect = new Stack(4);
-		computerDect = new Stack(4);
-
-		// Numberts 1 to 10
-    	for(int i = 1; i <= 10; i++) {
-    		pistiDect.push(new Card(Integer.toString(i), "Spade"));//black
-			pistiDect.push(new Card(Integer.toString(i), "Club"));//black
-			pistiDect.push(new Card(Integer.toString(i), "Diamond"));//red
-			pistiDect.push(new Card(Integer.toString(i), "Heard"));//red
-    	}
-
-		// Joker
-    	pistiDect.push(new Card("Joker", "Spade"));
-		pistiDect.push(new Card("Joker", "Club"));
-		pistiDect.push(new Card("Joker", "Diamond"));
-		pistiDect.push(new Card("Joker", "Heard"));
-
-		// Queen
-		pistiDect.push(new Card("Queen", "Spade"));
-		pistiDect.push(new Card("Queen", "Club"));
-		pistiDect.push(new Card("Queen", "Diamond"));
-		pistiDect.push(new Card("Queen", "Heard"));
-
-		// King
-		pistiDect.push(new Card("King", "Spade"));
-		pistiDect.push(new Card("King", "Club"));
-		pistiDect.push(new Card("King", "Diamond"));
-		pistiDect.push(new Card("King", "Heard"));
-
-		pistiDect.shuffle();
-
-		// Filling the dects
-		for(int i = 0; i < 4; i++){
-			poolDect.push(pistiDect.pop());
-			playerDect.push(pistiDect.pop());
-			computerDect.push(pistiDect.pop());
-		}
-    }
-
-	private void displayPisti(int score){
-		cn.getTextWindow().setCursorPosition(28, 9);
-		System.out.print("+-----------+");
-		cn.getTextWindow().setCursorPosition(28, 10);
-		System.out.print(String.format("|%-11s|", ((Card)poolDect.peek()).getNumber() + " " + ((Card)poolDect.peek()).getType()));
-		cn.getTextWindow().setCursorPosition(28, 11);
-		System.out.print("+-----------+");
+	public static void clickSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		File file = new File("click.wav");
+		javax.sound.sampled.AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+		Clip clip = AudioSystem.getClip();
+		clip.open(audioStream);
+		clip.start();
 	}
+
+    
+
+
 }
