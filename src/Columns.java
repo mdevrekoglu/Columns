@@ -27,7 +27,7 @@ public class Columns {
     // Variables for game play
     private int mousepr, mouserl, keypr, rkey, mousex, mousey;
     private int keyX = 4, keyY = 3;
-    private int columnsX, columnsY;
+    private int columnsX =1, columnsY = 0;
     private int prevColumnsX, prevColumnsY;
     private int finishedSets;
     public static int transfer = 0;
