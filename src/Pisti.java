@@ -18,7 +18,7 @@ public class Pisti {
     private KeyListener klis;
 
     // Scores and other stuff
-    private int playerScore = 0, computerScore = 0, turn = 24;
+    private int playerScore = 0, computerScore = 0, turn = 1;
     private Boolean isSelected1, isSelected2;
     private Card tempCard;
 
@@ -214,7 +214,7 @@ public class Pisti {
 		cn.getTextWindow().setCursorPosition(28, 9);
 		System.out.print("+---------+");
 		cn.getTextWindow().setCursorPosition(28, 10);
-		System.out.print(String.format("|%-6s  ", ((Card)poolDect.peek()).getNumber()) +  ((Card)poolDect.peek()).getType() + "| " + turn);
+		System.out.print(String.format("|%-6s  ", ((Card)poolDect.peek()).getNumber()) +  ((Card)poolDect.peek()).getType() + "| Turn: " + turn);
 		cn.getTextWindow().setCursorPosition(28, 11);
 		System.out.print("+---------+");
 
@@ -283,10 +283,10 @@ public class Pisti {
         cn.getTextWindow().setCursorPosition(20, 10);
 
         if(playerScore > computerScore){
-            System.out.print("Player wins with score: " + (playerScore - computerScore));
+            System.out.print("Player wins with score: " + (playerScore));
         }
         else if(playerScore < computerScore){
-            System.out.print("Computer wins with score: " + (computerScore - playerScore));
+            System.out.print("Computer wins with score: " + (computerScore));
         }
         else{
             System.out.println("        No one wins!");
