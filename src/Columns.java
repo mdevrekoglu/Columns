@@ -2,8 +2,6 @@ import enigma.console.TextAttributes;
 import enigma.core.Enigma;
 import enigma.event.TextMouseEvent;
 import enigma.event.TextMouseListener;
-import jdk.swing.interop.SwingInterOpUtils;
-
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -18,7 +16,6 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-
 public class Columns {
 
     public static enigma.console.Console cn = Enigma.getConsole("Columns", 80, 35, 20, 2);
@@ -28,33 +25,24 @@ public class Columns {
     private KeyListener klis;
 
     // Variables for game play
-    private int mousepr, mouserl;
-    private int mousex, mousey;
-    private int keyX = 4;
-    private int keyY = 3;
-    private int columnsX = 1;
-    private int columnsY = 0;
-    private int prevColumnsX = -1;
-    private int prevColumnsY = -1;
-    private int keypr;
-    private int rkey;
-    private int finishedSets = 0;
+    private int mousepr, mouserl, keypr, rkey, mousex, mousey;
+    private int keyX = 4, keyY = 3;
+    private int columnsX, columnsY;
+    private int prevColumnsX, prevColumnsY;
+    private int finishedSets;
     public static int transfer = 0;
-    private static Boolean firstPress = false;
-    private static Boolean secondPress = false;
-    private Boolean isZPressed = false;
+    private static Boolean firstPress = false, secondPress = false, isZPressed = false;
 
     // Box and High Score
     private static SingleLinkedList box;
     private static DoubleLinkedList highScoreList;
     public static Player player;
 
-
     // Columns
     private static MultiLinkedList columns;
 
     Columns() throws InterruptedException, UnsupportedAudioFileException, IOException, LineUnavailableException {
-        consoleClear();// An function to clear console
+        consoleClear();// A function to clear console
         // Key listener for mouse and keyboard
         listener();
 
@@ -62,7 +50,6 @@ public class Columns {
         while (true) {
             consoleClear();
             printMenu();
-            System.out.println("♥ ♦ ♣ ♠");
 
             // If key pressed
             if (keypr == 1) {
@@ -84,16 +71,14 @@ public class Columns {
                         }
                         Thread.sleep(50);
 
-                    } while (rkey != KeyEvent.VK_1 && rkey != KeyEvent.VK_NUMPAD1
-                            && rkey != KeyEvent.VK_2 && rkey != KeyEvent.VK_NUMPAD2);
-
+                    } while (rkey != KeyEvent.VK_1 && rkey != KeyEvent.VK_NUMPAD1 //If user tries to press a key
+                            && rkey != KeyEvent.VK_2 && rkey != KeyEvent.VK_NUMPAD2);//different from 1 or 2 do not continue.
 
                     // If player choose to play classic mode this part starts to work
                     if (rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1) {
-                        transfer = 0;
+                        transfer = keypr = 0;
                         generateBox();
                         createInitialColumns();
-                        keypr = 0;
                         consoleClear();
 
                         // Player operations
@@ -109,7 +94,6 @@ public class Columns {
                         player = new Player(name, 0);
                         scan.close();
 
-
                         printGameArea();
                         TextAttributes coloredNumber = new TextAttributes(Color.GRAY, Color.CYAN);
                         cn.getTextWindow().setCursorPosition(keyX - 1, keyY);
@@ -121,28 +105,51 @@ public class Columns {
 
                         // Main game loop
                         while (true) {
-                            keyListeners();
-                            mouseListeners();
+                            keyListeners();//for players prefer keyboard
+                            mouseListeners();//for players prefer mouse
                             Thread.sleep(50);
+
                             if (rkey == KeyEvent.VK_ESCAPE || player.getScore() == 5000 || rkey == KeyEvent.VK_E) {
                                 generateHighScoreTable();
                                 cn.getTextWindow().setCursorPosition(0, 20);
                                 System.out.print("Please press ESC to return menu");
                                 keypr = rkey = 0;
+
                                 while (rkey != KeyEvent.VK_ESCAPE) {
                                     Thread.sleep(200);
                                 }
-                                keypr = rkey = 0;
+                                rkey = 0;
                                 break;
                             }
                         }
-                    } else {// If player choose to play additional mode called Pisti
-                        new Pisti();
                     }
+                    else // If player choose to play additional mode called Pisti
+                        new Pisti();
+
+
                 } else if (rkey == KeyEvent.VK_2 || rkey == KeyEvent.VK_NUMPAD2) {
                     consoleClear();
-                    howToPlay();
-                    keypr = 0;
+                    keypr = rkey = 0;
+                    cn.getTextWindow().setCursorPosition(26,15);
+                    System.out.println("1-How to Play Classic");
+                    cn.getTextWindow().setCursorPosition(26,16);
+                    System.out.println("2-How to Play Pisti");
+
+                    do {
+
+                        Thread.sleep(50);
+
+                    } while (rkey != KeyEvent.VK_1 && rkey != KeyEvent.VK_NUMPAD1
+                            && rkey != KeyEvent.VK_2 && rkey != KeyEvent.VK_NUMPAD2);
+
+                    consoleClear();
+                    // If player choose to play classic mode this part starts to work
+                    if (rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1)
+                        howToPlayClassic();
+                    else
+                        howToPlayPisti();
+
+                    keypr = rkey = 0;
                     while (true) {
                         if (keypr == 1) {
                             if (rkey == KeyEvent.VK_ESCAPE) {
@@ -164,8 +171,7 @@ public class Columns {
         }
     }
 
-
-    private void createInitialColumns() { // adds 5 random numbers to the each column.
+    private void createInitialColumns() { // adds 5 random numbers to each column.
         columns = new MultiLinkedList();
         columns.addColumn(1);
         columns.addColumn(2);
@@ -186,7 +192,6 @@ public class Columns {
         tmlis = new TextMouseListener() {
             public void mouseClicked(TextMouseEvent arg0) {
             }
-
             public void mousePressed(TextMouseEvent arg0) {
                 if (mousepr == 0) {
                     mousepr = 1;
@@ -194,7 +199,6 @@ public class Columns {
                     mousey = arg0.getY();
                 }
             }
-
             public void mouseReleased(TextMouseEvent arg0) {
                 if (mouserl == 0) {
                     mouserl = 1;
@@ -205,18 +209,15 @@ public class Columns {
         };
         cn.getTextWindow().addTextMouseListener(tmlis);
 
-
         klis = new KeyListener() {
             public void keyTyped(KeyEvent e) {
             }
-
             public void keyPressed(KeyEvent e) {
                 if (keypr == 0) {
                     keypr = 1;
                     rkey = e.getKeyCode();
                 }
             }
-
             public void keyReleased(KeyEvent e) {
             }
         };
@@ -224,18 +225,31 @@ public class Columns {
     }
 
     public static void printMenu() {
-        cn.getTextWindow().setCursorPosition(15, 3);
-        System.out.println("---------------------------------");
-        cn.getTextWindow().setCursorPosition(28, 6);
+
+        cn.getTextWindow().setCursorPosition(25, 11);
+        for (int i = 0; i < 4; i++) {
+            cn.getTextWindow().output("♥ ", new TextAttributes(Color.RED));
+            cn.getTextWindow().output("♦ ", new TextAttributes(Color.BLUE));
+            cn.getTextWindow().output("♣ ");
+            cn.getTextWindow().output("♠ ", new TextAttributes(Color.GREEN));
+        }
+
+        cn.getTextWindow().setCursorPosition(38, 14);
         System.out.println(" MENU ");
-        cn.getTextWindow().setCursorPosition(24, 8);
+        cn.getTextWindow().setCursorPosition(34, 15);
         System.out.println("1. Start");
-        cn.getTextWindow().setCursorPosition(24, 9);
+        cn.getTextWindow().setCursorPosition(34, 16);
         System.out.println("2. How to Play?");
-        cn.getTextWindow().setCursorPosition(24, 10);
+        cn.getTextWindow().setCursorPosition(34, 17);
         System.out.println("3. Exit");
-        cn.getTextWindow().setCursorPosition(15, 13);
-        System.out.println("---------------------------------");
+
+        cn.getTextWindow().setCursorPosition(25, 20);
+        for (int i = 0; i < 4; i++) {
+            cn.getTextWindow().output("♥ ", new TextAttributes(Color.RED));
+            cn.getTextWindow().output("♦ ", new TextAttributes(Color.BLUE));
+            cn.getTextWindow().output("♣ ");
+            cn.getTextWindow().output("♠ ", new TextAttributes(Color.GREEN));
+        }
     }
 
     public static void exitMessage() {
@@ -307,8 +321,7 @@ public class Columns {
 
     private int createRandomNumber(int minValue, int maxValue) {
         Random random = new Random();
-        int number = random.nextInt((maxValue - minValue) + 1) + minValue;
-        return number;
+        return random.nextInt((maxValue - minValue) + 1) + minValue;
     }
 
     private void generateBox() { // Fills the box with 50 random numbers from 1-10
@@ -323,7 +336,9 @@ public class Columns {
 
     private void generateHighScoreTable() { // Creates a highscore table and writes it ti the highscore.txt
         consoleClear();
+
         finishedSets = (int) player.getScore() / 1000;
+
         if (transfer == 0)
             player.setScore(0);
         else
@@ -440,19 +455,7 @@ public class Columns {
                 columns.transfer(prevColumnsX, columnsX, prevColumnsY);
                 columns.checkMatching(prevColumnsX, columnsX);
                 isZPressed = false;
-        		/*
-        		keyX = 4;
-        		keyY = 3;
-        		columnsX = 1;
-        		columnsY = 0;
-        		prevColumnsX = -1;
-        		prevColumnsY= -1;
-        		printGameArea();
-        		cn.getTextWindow().setCursorPosition(keyX -1, keyY);
-        		System.out.println(">");
-        		cn.getTextWindow().setCursorPosition(keyX + 2, keyY);
-        		System.out.println("<");
-        		*/
+
             }
             if (secondPress && !box.isEmpty() && Math.abs((int) box.peek() - columns.getLastNumber(columnsX)) <= 1) {
                 columns.addNumber(columnsX, (Integer) box.pop());
@@ -471,16 +474,13 @@ public class Columns {
 
     private void mouseListeners() throws InterruptedException, UnsupportedAudioFileException, IOException, LineUnavailableException {
         if (mousepr == 1) {
-            clickSound();
-            keypr = 0;
-            mousepr = 0;
-            Boolean isNumberSelected = false;
-            Boolean isNumberOfBoxWanted = false;
-            int firstX = mousex;
-            int firstY = mousey;
-            // cn.getTextWindow().setCursorPosition(8 * i - 5, 2); 
-            // 3 - 11 - 19 - 27 - 35
-            if (firstY - 3 >= 0) {
+            clickSound();//make sound everytime user clicks.
+
+            keypr = mousepr = 0;
+            boolean isNumberSelected = false, isNumberOfBoxWanted = false;
+            int firstX = mousex, firstY = mousey;
+
+            if (firstY - 3 >= 0) {//To be sure that the selected point on the column.
                 if ((firstX + 4) % 8 == 0 && (firstX + 4) / 8 <= 5 && columns.sizeOfColumn((firstX + 4) / 8) > firstY - 3) {
                     isNumberSelected = true;
                     columns.printeColoredColumn(cn, (firstX + 4) / 8, firstY - 3);
@@ -489,25 +489,20 @@ public class Columns {
                     isNumberOfBoxWanted = true;
                 }
             }
-            while (mouserl == 0) {
+
+            while (mouserl == 0)
                 Thread.sleep(50);
-            	/*
-            	if(mousepr == 1)
-            		break;
-            	*/
-            }
 
-            if (isNumberSelected) {
-                if ((mousex + 4) % 8 == 0) {
-                    //int firstColumn, int secondColumn, int element
-
+            if (isNumberSelected) {//If number selected,
+                if ((mousex + 4) % 8 == 0) {//and the cursor on a column.
                     columns.transfer((firstX + 4) / 8, (mousex + 4) / 8, firstY - 3);
                     columns.checkMatching((firstX + 4) / 8, (mousex + 4) / 8);
-                } else {
-                    printGameArea();
                 }
+                else
+                    printGameArea();
             }
-            if (isNumberOfBoxWanted) {
+
+            if (isNumberOfBoxWanted) {//if number in the box selected enter here.
                 if (!box.isEmpty()) {
                     columns.addNumber((firstX + 4) / 8, (Integer) box.pop());
                     columns.checkMatching((firstX + 4) / 8);
@@ -527,14 +522,12 @@ public class Columns {
         clip.start();
     }
 
-    public static void howToPlay() {
-
+    public static void howToPlayClassic() {
         cn.getTextWindow().setCursorPosition(28, 0);
-        System.out.println("HOW TO PLAY?");
-        System.out.println("1. COLUMNS");
+        System.out.println("COLUMNS");
         System.out.println("   Columns is a card game that play with 50 cards-5 number set 1-10.Goal of\nthe game is " +
                 "reaching highest score by collecting number of sets.");
-        System.out.println("\n1.1 TRANSFER");
+        System.out.println("\nTRANSFER");
         System.out.println("a: Selected number in from-column (or drawn number from box).\nb: The last number in to-column." +
                 "\nDifference between a and b must be 0 or 1 or -1.\nIf to-column is empty, the top number" +
                 " of the transferred numbers must be \n1 or 10.");
@@ -547,15 +540,19 @@ public class Columns {
         System.out.println("Move your cursor with arrow keys.");
         System.out.println("Press 'Z' to select number to transfer from column or press 'B' to select\ndrawn number" +
                 " from box and press 'X' when your cursor on the target column.");
-
-        System.out.println("\n1.2 SCORE");
+        System.out.println("\nSCORE");
         System.out.println("   If you able to form ordered set you earn 1000 points. At the end of the\ngame your score " +
                 "will be calculated by the formula\nEnd-Game Score  =  100*Finished_ordered_sets  +  ( Score /Transfer_number )");
 
-        System.out.println("\n2. PISTI");
-        System.out.println("  The pisti is a card game that play with a deck which includes 52 cards. The\naim ofthe game" +
+        System.out.println("Press 'ESC' to return the menu");
+    }
+
+    public void howToPlayPisti() {
+        cn.getTextWindow().setCursorPosition(28, 0);
+        System.out.println("PISTI");
+        System.out.println("\n  The pisti is a card game that play with a deck which includes 52 cards. The\naim of the game" +
                 "is beating your opponent(Computer) by matching cards.");
-        System.out.println("\n2.1 GAMEPLAY");
+        System.out.println("\nGAMEPLAY");
         System.out.println("If rank of the played card matches the rank of the previous card on\nthe pile, the player " +
                 "captures the whole pile. The captured cards are stored.\nPlaying a jack also captures the whole pile," +
                 " no matter what card is\non top of it. ");
@@ -564,15 +561,15 @@ public class Columns {
         System.out.println("If the pile consists of just one card and the next player captures it by\nplaying a matching" +
                 " card (not a jack) capturing player earns 10 points\nfor pisti.");
         System.out.println("Press 1,2,3 or 4 to play your cards.");
-        System.out.println("\n2.2 SCORE");
+        System.out.println("\nSCORE");
         System.out.println("Each jack           1 point\n" +
-                            "Each ace            1 point\n" +
-                            "club2               2 points\n" +
-                            "diamond10           3 points\n" +
-                            "Majority of cards   3 points\n" +
-                            "Each pisti         10 points\n");
+                "Each ace            1 point\n" +
+                "club2               2 points\n" +
+                "diamond10           3 points\n" +
+                "Majority of cards   3 points\n" +
+                "Each pisti         10 points\n");
+
         System.out.println("Press 'ESC' to return the menu");
     }
-
 
 }

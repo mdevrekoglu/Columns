@@ -4,10 +4,8 @@ import java.awt.event.KeyListener;
 public class Pisti {
 
     // Additional variable
-	private static Stack pistiDect;
-	private static Stack poolDect;
-	private static Card[] playerDect;
-	private static Card[] computerDect;
+	private static Stack pistiDect, poolDect;
+	private static Card[] playerDect, computerDect;
 
     // The enigma console from main class
 	enigma.console.Console cn = Columns.cn;
@@ -33,11 +31,11 @@ public class Pisti {
         // To print game area
         displayPisti();
 
-        // An temp variable to store 'Selected card'
+        // A temp variable to store 'Selected card'
         tempCard = null;
         isSelected1 = isSelected2 = false;
 
-        // Boleans for loops and if statements
+        // Booleans for loops and if statements
         keypr = 0;
 
         while(true){          
@@ -62,23 +60,23 @@ public class Pisti {
                         tempCard = playerDect[2];
                         playerDect[2] = null;
                     }
-                    else if(rkey == KeyEvent.VK_4 || rkey == KeyEvent.VK_NUMPAD4){
+                    else{
                         tempCard = playerDect[3];
                         playerDect[3] = null;
                     }
 
                     // Checks if there is a match
                     if(tempCard.getNumber().equalsIgnoreCase("Joker")){
-                        
                         poolDect.push(tempCard);
+
                         while(!poolDect.isEmpty()){
                             addScore(playerScore);      
                             poolDect.pop();
                         }
                     }
                     else if(tempCard.getNumber().equalsIgnoreCase(((Card)poolDect.peek()).getNumber())){
-                      
-                        poolDect.push(tempCard);                    
+                        poolDect.push(tempCard);
+
                         if(poolDect.size() == 2){
                             playerScore += 10;                            
                         }
@@ -88,9 +86,8 @@ public class Pisti {
                             poolDect.pop();
                         }
                     }
-                    else{
+                    else
                         poolDect.push(tempCard);
-                    }
 
                     // Resets temp variable to use again for computer                  
                     displayPisti();
@@ -101,6 +98,7 @@ public class Pisti {
                         if(!poolDect.isEmpty() && computerDect[i] != null && computerDect[i].getNumber().equalsIgnoreCase("Joker")){                            
                             poolDect.push(computerDect[i]);
                             computerDect[i] = null;
+
                             while(!poolDect.isEmpty()){
                                 addScore(computerScore); 
                                 poolDect.pop();
@@ -166,6 +164,8 @@ public class Pisti {
 
                     displayPisti();             
                 }
+                else if(rkey == KeyEvent.VK_ESCAPE)
+                    break;
                 keypr = 0;
             }
          
@@ -210,20 +210,22 @@ public class Pisti {
     // This one prints the game area
     private void displayPisti(){
         Columns.consoleClear();
-
-		cn.getTextWindow().setCursorPosition(28, 9);
+        cn.getTextWindow().setCursorPosition(67,3);
+        System.out.print("Turn: " + turn + "  ");
+		cn.getTextWindow().setCursorPosition(35, 11);
 		System.out.print("+---------+");
-		cn.getTextWindow().setCursorPosition(28, 10);
-		System.out.print(String.format("|%-6s  ", ((Card)poolDect.peek()).getNumber()) +  ((Card)poolDect.peek()).getType() + "| Turn: " + turn);
-		cn.getTextWindow().setCursorPosition(28, 11);
+		cn.getTextWindow().setCursorPosition(35, 12);
+		System.out.print(String.format("|%-6s  ", ((Card)poolDect.peek()).getNumber()) +  ((Card)poolDect.peek()).getType() + "|");
+		cn.getTextWindow().setCursorPosition(35, 13);
 		System.out.print("+---------+");
 
-		cn.getTextWindow().setCursorPosition(5, 20);
+
+		cn.getTextWindow().setCursorPosition(12, 25);
 		for (int i = 0; i < 4; i++)
             if(playerDect[i] != null)
 			    System.out.printf("+----%s----+\t", i + 1);
 
-		cn.getTextWindow().setCursorPosition(5, 21);
+		cn.getTextWindow().setCursorPosition(12, 26);
 		for (int i = 0; i < 4; i++)
 			if(playerDect[i] != null)
 				System.out.print(String.format("|%-6s  ", playerDect[i].getNumber())  +  playerDect[i].getType() + "|\t");
@@ -239,29 +241,29 @@ public class Pisti {
 
 		// Numberts 1 to 10
     	for(int i = 1; i <= 10; i++) {
-    		pistiDect.push(new Card(Integer.toString(i), "S"));
-			pistiDect.push(new Card(Integer.toString(i), "C"));
-			pistiDect.push(new Card(Integer.toString(i), "D"));
-			pistiDect.push(new Card(Integer.toString(i), "H"));
+    		pistiDect.push(new Card(Integer.toString(i), "♠"));
+			pistiDect.push(new Card(Integer.toString(i), "♣"));
+			pistiDect.push(new Card(Integer.toString(i), "♦"));
+			pistiDect.push(new Card(Integer.toString(i), "♥"));
     	}
 
 		// Joker
-    	pistiDect.push(new Card("Joker", "S"));
-		pistiDect.push(new Card("Joker", "C"));
-		pistiDect.push(new Card("Joker", "D"));
-		pistiDect.push(new Card("Joker", "H"));
+    	pistiDect.push(new Card("Joker", "♠"));
+		pistiDect.push(new Card("Joker", "♣"));
+		pistiDect.push(new Card("Joker", "♦"));
+		pistiDect.push(new Card("Joker", "♥"));
 
 		// Queen
-		pistiDect.push(new Card("Queen", "S"));
-		pistiDect.push(new Card("Queen", "C"));
-		pistiDect.push(new Card("Queen", "D"));
-		pistiDect.push(new Card("Queen", "H"));
+		pistiDect.push(new Card("Queen", "♠"));
+		pistiDect.push(new Card("Queen", "♣"));
+		pistiDect.push(new Card("Queen", "♦"));
+		pistiDect.push(new Card("Queen", "♥"));
 
 		// King
-		pistiDect.push(new Card("King", "S"));
-		pistiDect.push(new Card("King", "C"));
-		pistiDect.push(new Card("King", "D"));
-		pistiDect.push(new Card("King", "H"));
+		pistiDect.push(new Card("King", "♠"));
+		pistiDect.push(new Card("King", "♣"));
+		pistiDect.push(new Card("King", "♦"));
+		pistiDect.push(new Card("King", "♥"));
 
 		pistiDect.shuffle();
 
@@ -272,12 +274,12 @@ public class Pisti {
 			computerDect[i] = (Card)pistiDect.pop();
 		}
 
-        // If the first element of dect is joker the cards are being distributed
+        // If the first element of dect is joker the cards are being distributed again.
         if(((Card)poolDect.peek()).getNumber().equalsIgnoreCase("Joker"))
             fillPistiBoxs();
     }
     
-    // If the game is ended this function is being called and it prints the winner
+    // If the game is ended this function is being called, and it prints the winner
     private void endGame() throws InterruptedException{
         Columns.consoleClear();
         cn.getTextWindow().setCursorPosition(20, 10);
