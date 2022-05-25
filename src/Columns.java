@@ -462,6 +462,7 @@ public class Columns {
                 secondPress = false;
                 firstPress = false;
                 columns.checkMatching(columnsX);
+                transfer++;
                 printGameArea();
             }
             rkey = 0;
@@ -507,6 +508,7 @@ public class Columns {
                     columns.addNumber((firstX + 4) / 8, (Integer) box.pop());
                     columns.checkMatching((firstX + 4) / 8);
                     firstPress = false;
+                    transfer++;
                     printGameArea();
                 }
             }
