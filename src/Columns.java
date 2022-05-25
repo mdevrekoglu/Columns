@@ -28,7 +28,7 @@ public class Columns {
     private int mousepr, mouserl, keypr, rkey, mousex, mousey;
     private int keyX = 4, keyY = 3;
     private int columnsX =1, columnsY = 0;
-    private int prevColumnsX, prevColumnsY;
+    private int prevColumnsX = -1, prevColumnsY = -1;
     private int finishedSets;
     public static int transfer = 0;
     private static Boolean firstPress = false, secondPress = false, isZPressed = false;
