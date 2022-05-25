@@ -457,7 +457,9 @@ public class Columns {
                 isZPressed = false;
 
             }
-            if (secondPress && !box.isEmpty() && Math.abs((int) box.peek() - columns.getLastNumber(columnsX)) <= 1) {
+            if (secondPress && !box.isEmpty() && (Math.abs((int) box.peek() - columns.getLastNumber(columnsX)) <= 1 ||
+                    (columns.getLastNumber(columnsX) == -1 && ((int)box.peek() == 1 || (int)box.peek() == 10))))
+            {
                 columns.addNumber(columnsX, (Integer) box.pop());
                 secondPress = false;
                 firstPress = false;
@@ -486,7 +488,9 @@ public class Columns {
                     isNumberSelected = true;
                     columns.printeColoredColumn(cn, (firstX + 4) / 8, firstY - 3);
                 }
-                if (!box.isEmpty() && (firstX + 4) % 8 == 0 && (firstX + 4) / 8 <= 5 && firstY == columns.sizeOfColumn((firstX + 4) / 8) + 3 && Math.abs((int) box.peek() - columns.getLastNumber((firstX + 4) / 8)) <= 1) {
+                if (!box.isEmpty() && (firstX + 4) % 8 == 0 && (firstX + 4) / 8 <= 5 && firstY == columns.sizeOfColumn(
+                        (firstX + 4) / 8) + 3 && (Math.abs((int) box.peek() - columns.getLastNumber((firstX + 4) / 8)) <= 1 ||
+                        (columns.getLastNumber((firstX + 4) / 8) == -1) && ((int)box.peek() == 1 || (int)box.peek() == 10))) {
                     isNumberOfBoxWanted = true;
                 }
             }
