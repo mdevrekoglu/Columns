@@ -136,7 +136,7 @@ public class Columns {
                     System.out.println("2-How to Play Pisti");
 
                     do {
-
+                        keypr = rkey = 0;
                         Thread.sleep(50);
 
                     } while (rkey != KeyEvent.VK_1 && rkey != KeyEvent.VK_NUMPAD1
@@ -253,15 +253,15 @@ public class Columns {
     }
 
     public static void exitMessage() {
-        cn.getTextWindow().setCursorPosition(15, 6);
+        cn.getTextWindow().setCursorPosition(22, 12);
         System.out.println("    _/_/_/    _/      _/  _/_/_/_/  ");
-        cn.getTextWindow().setCursorPosition(15, 7);
+        cn.getTextWindow().setCursorPosition(22, 13);
         System.out.println("   _/    _/    _/  _/    _/         ");
-        cn.getTextWindow().setCursorPosition(15, 8);
+        cn.getTextWindow().setCursorPosition(22, 14);
         System.out.println("  _/_/_/        _/      _/_/_/      ");
-        cn.getTextWindow().setCursorPosition(15, 9);
+        cn.getTextWindow().setCursorPosition(22, 15);
         System.out.println(" _/    _/      _/      _/           ");
-        cn.getTextWindow().setCursorPosition(15, 10);
+        cn.getTextWindow().setCursorPosition(22, 16);
         System.out.println("_/_/_/        _/      _/_/_/_/      ");
     }
 
