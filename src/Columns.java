@@ -512,6 +512,7 @@ public class Columns {
                     columns.addNumber((firstX + 4) / 8, (Integer) box.pop());
                     columns.checkMatching((firstX + 4) / 8);
                     firstPress = false;
+                    secondPress = false;
                     transfer++;
                     printGameArea();
                 }
