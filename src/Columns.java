@@ -111,7 +111,7 @@ public class Columns {
 
                             if (rkey == KeyEvent.VK_ESCAPE || player.getScore() == 5000 || rkey == KeyEvent.VK_E) {
                                 generateHighScoreTable();
-                                cn.getTextWindow().setCursorPosition(0, 20);
+                                cn.getTextWindow().setCursorPosition(22, 25);
                                 System.out.print("Please press ESC to return menu");
                                 keypr = rkey = 0;
 
@@ -356,7 +356,9 @@ public class Columns {
             }
             sc.close(); // Close the scanner
 
-            highScoreList.display(); // Display the highscore  
+            cn.getTextWindow().setCursorPosition(28,1);
+            System.out.print("HIGH SCORE TABLE");
+            highScoreList.display(cn); // Display the highscore
             PrintWriter pw = new PrintWriter("highscore.txt"); // open a print writer for the highscore
 
             for (int i = 1; i < highScoreList.size() + 1; i++) {

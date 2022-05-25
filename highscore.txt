@@ -1,9 +1,10 @@
-fatih dicle 5000.0
-s s 600.0
+Fatih Dicle 5000.0
 Tarik Deniz 521.07
 Sema Firat 378.24
 Seda Ruzgar 224.67
 Ali Vadi 136.32
-ozan kalkan 3.0
-vedat kara 2.0
-s s 0.0
+Yasir Uslu 4.0
+Ozan Kalkan 3.0
+Vedat Kara 2.0
+Mehmet Devrekoğlu 1.0
+Player Player 0.0

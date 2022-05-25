@@ -71,15 +71,18 @@ public class DoubleLinkedList {
         }
     }
 
-    public void display() {
+    public void display(enigma.console.Console obj) {
 		if(head == null) {
 			System.out.println("List is empty!");
 		}
 		else {
+			int rank = 1;
 			DoubleLinkedListNode temp = head;
 			while(temp != null) {
-				System.out.println(((Player)temp.getData()).getName() + " " + ((Player)temp.getData()).getScore());
+				obj.getTextWindow().setCursorPosition(26,rank + 4);
+				System.out.println(rank + ". " + ((Player)temp.getData()).getName() + " " + ((Player)temp.getData()).getScore());
 				temp = temp.getNext();
+				rank++;
 			}
 		}
 	}
