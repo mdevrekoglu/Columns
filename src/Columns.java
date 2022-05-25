@@ -73,7 +73,9 @@ public class Columns {
                 	System.out.println("\n\n");
                 	System.out.println("                               1-Classic");
                 	System.out.println("                               2-Pisti");
-                	do {
+                	
+					// A loop to be sure that user selected a game mode
+					do {
                 		if(keypr == 1) {
                 			keypr = 0;
                 		}
@@ -83,6 +85,7 @@ public class Columns {
                 			&& rkey != KeyEvent.VK_2 && rkey != KeyEvent.VK_NUMPAD2);
                						
                 	
+					// If player choose to play classic mode this part starts to work
                 	if(rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1) {
                 		
                 		generateBox();
@@ -118,8 +121,10 @@ public class Columns {
                         	keyListeners();
                             mouseListeners();
                             Thread.sleep(50);
-                            if(rkey == KeyEvent.VK_ESCAPE || player.getScore() == 5000) {
+                            if(rkey == KeyEvent.VK_ESCAPE || player.getScore() == 5000 || rkey == KeyEvent.VK_E) {
                             	generateHighScoreTable();
+								cn.getTextWindow().setCursorPosition(0, 20);
+								System.out.print("Please press ESC to return menu");
                             	keypr = rkey = 0;
                             	while(rkey != KeyEvent.VK_ESCAPE ) {
                             		Thread.sleep(200);
@@ -129,8 +134,7 @@ public class Columns {
                             }
                         }           		
                 	}
-                	else{
-
+                	else{// If player choose to play additional mode called Pisti
 						new Pisti();						
 					}		
 						
@@ -323,17 +327,20 @@ public class Columns {
     private void generateHighScoreTable() { // Creates a highscore table and writes it ti the highscore.txt
         consoleClear();
         finishedSets = (int)player.getScore() / 1000;
- 		player.setScore(100*finishedSets + (player.getScore()/transfer));
+		if(transfer == 0)
+			player.setScore(0);
+		else
+ 			player.setScore(100*finishedSets + (player.getScore()/transfer));
     
         try {    	
         	FileReader file = new FileReader("highscore.txt"); // Read the highscore.txt
             Scanner sc = new Scanner(file); // Scanner for the highscore.txt
 			highScoreList = new DoubleLinkedList();
-        	highScoreList.add(player); // add the player to the highscore
+        	highScoreList.add(player); // Add the player to the highscore
         	
         	
             while(sc.hasNext()){ // Read the highscore.txt
-                highScoreList.add(new Player(sc.next() + " " + sc.next(),Double.parseDouble(sc.next()))); // add the players to the highscore
+                highScoreList.add(new Player(sc.next() + " " + sc.next(),Double.parseDouble(sc.next()))); // Add the players to the highscore
             }
             sc.close(); // Close the scanner
             
