@@ -62,6 +62,7 @@ public class Columns {
         while (true) {
             consoleClear();
             printMenu();
+            System.out.println("♥ ♦ ♣ ♠");
 
             // If key pressed
             if (keypr == 1) {
@@ -569,7 +570,7 @@ public class Columns {
                             "club2               2 points\n" +
                             "diamond10           3 points\n" +
                             "Majority of cards   3 points\n" +
-                            "Each pişti         10 points\n");
+                            "Each pisti         10 points\n");
         System.out.println("Press 'ESC' to return the menu");
     }
 
