@@ -363,7 +363,7 @@ public class Columns {
 
             for (int i = 1; i < highScoreList.size() + 1; i++) {
                 Player tempPlayer = (Player) highScoreList.getElement(i);
-                pw.print(tempPlayer.getName() + " " + tempPlayer.getScore() + "\n"); // print the highscore line by line
+                pw.print(tempPlayer.getName() + " " + String.format ("%.2f",(tempPlayer.getScore())) + "\n"); // print the highscore line by line
             }
 
             pw.close(); // close the print writer

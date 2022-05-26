@@ -80,7 +80,7 @@ public class DoubleLinkedList {
 			DoubleLinkedListNode temp = head;
 			while(temp != null) {
 				obj.getTextWindow().setCursorPosition(26,rank + 4);
-				System.out.println(rank + ". " + ((Player)temp.getData()).getName() + " " + ((Player)temp.getData()).getScore());
+				System.out.println(rank + ". " + ((Player)temp.getData()).getName() + " " + String.format ("%.2f",((Player)temp.getData()).getScore()));
 				temp = temp.getNext();
 				rank++;
 			}
