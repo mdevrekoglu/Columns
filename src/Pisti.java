@@ -45,7 +45,7 @@ public class Pisti {
                 if(((rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1) && playerDect[0] != null)
                 || ((rkey == KeyEvent.VK_2 || rkey == KeyEvent.VK_NUMPAD2) && playerDect[1] != null)
                 || ((rkey == KeyEvent.VK_3 || rkey == KeyEvent.VK_NUMPAD3) && playerDect[2] != null)
-                || ((rkey == KeyEvent.VK_4 || rkey == KeyEvent.VK_NUMPAD1) && playerDect[3] != null)){
+                || ((rkey == KeyEvent.VK_4 || rkey == KeyEvent.VK_NUMPAD4) && playerDect[3] != null)){
                     
                     // This part selects the card and removes it from player's cards
                     if(rkey == KeyEvent.VK_1 || rkey == KeyEvent.VK_NUMPAD1){
@@ -70,7 +70,7 @@ public class Pisti {
                         poolDect.push(tempCard);
 
                         while(!poolDect.isEmpty()){
-                            addScore(playerScore);      
+                            addPLayerScore();
                             poolDect.pop();
                         }
                     }
@@ -82,7 +82,7 @@ public class Pisti {
                         }
 
                         while(!poolDect.isEmpty()){
-                            addScore(playerScore); 
+                            addPLayerScore();
                             poolDect.pop();
                         }
                     }
@@ -100,7 +100,7 @@ public class Pisti {
                             computerDect[i] = null;
 
                             while(!poolDect.isEmpty()){
-                                addScore(computerScore); 
+                                addComputerScore();
                                 poolDect.pop();
                             }
                             isSelected1 = true;
@@ -120,7 +120,7 @@ public class Pisti {
                                 }
 
                                 while(!poolDect.isEmpty()){
-                                    addScore(computerScore);
+                                    addComputerScore();
                                     poolDect.pop();
                                 }
 
@@ -175,17 +175,30 @@ public class Pisti {
     }
 
     // This functions calculates the score that is going to be added
-    private void addScore(int score){
+    private void addPLayerScore(){
         if(((Card)poolDect.peek()).getNumber().equalsIgnoreCase("Joker"))
-            score++;
+            playerScore++;
         else if(((Card)poolDect.peek()).getNumber().equalsIgnoreCase("1"))
-            score++;
+            playerScore++;
         else if(((Card)poolDect.peek()).getNumber().equalsIgnoreCase("2") 
                 && ((Card)poolDect.peek()).getType().equalsIgnoreCase("C"))
-                score += 2;
+                playerScore += 2;
         else if(((Card)poolDect.peek()).getNumber().equalsIgnoreCase("10") 
         && ((Card)poolDect.peek()).getType().equalsIgnoreCase("C"))
-            score += 3;
+            playerScore += 3;
+    }
+
+    private void addComputerScore(){
+        if(((Card)poolDect.peek()).getNumber().equalsIgnoreCase("Joker"))
+            computerScore++;
+        else if(((Card)poolDect.peek()).getNumber().equalsIgnoreCase("1"))
+            computerScore++;
+        else if(((Card)poolDect.peek()).getNumber().equalsIgnoreCase("2")
+                && ((Card)poolDect.peek()).getType().equalsIgnoreCase("C"))
+            computerScore += 2;
+        else if(((Card)poolDect.peek()).getNumber().equalsIgnoreCase("10")
+                && ((Card)poolDect.peek()).getType().equalsIgnoreCase("C"))
+            computerScore += 3;
     }
 
     // Key listener for game
